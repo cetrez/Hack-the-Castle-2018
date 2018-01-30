@@ -59,6 +59,6 @@ A collection of useful links, you may of course use any other API you'd like.
 - [Keybase](https://keybase.io/docs/api/1.0)
 
 ### Tools
-[Localtunnel, Expose your computer to the internet](https://localtunnel.github.io/www/)
+- [Localtunnel, Expose your computer to the internet](https://localtunnel.github.io/www/)
 
 ### Inspiration
