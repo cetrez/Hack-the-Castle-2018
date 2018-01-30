@@ -10,8 +10,8 @@ ___
 **Hack the Castle** – *A social media hackathon*.  
 Winter hackathon at Cetrez Castle. A collaboration with [digIT](http://github.com/cthit) and [ArmIT](https://chalmers.it/business/).
 
-Use this repository as a starting point by forking it and start working. We will
-use the fork-tree to keep track of contestants.
+Use this repository as a starting point by forking it and start working.
+We will use the fork-tree to keep track of contestants.
 
 ## Rules
 Rules for the hackathon. Have fun!
@@ -62,3 +62,24 @@ A collection of useful links, you may of course use any other API you'd like.
 - [Localtunnel, Expose your computer to the internet](https://localtunnel.github.io/www/)
 
 ### Inspiration
+
+### Python frameworks and libraries
+- [Flask](http://flask.pocoo.org/)
+- [Django](https://www.djangoproject.com/)
+- [Hug](http://www.hug.rest/)
+- [Requests: HTTP for Humans](http://docs.python-requests.org/en/master/)
+- [Responses](https://github.com/getsentry/responses)
+- [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/)
+- [Scrapy](https://scrapy.org/)
+- [SQLAlchemy](http://www.sqlalchemy.org/)
+- [Natural Language Toolkit](http://www.nltk.org/)
+
+### Javascript frameworks and libraries
+- [Hapi.js](https://hapijs.com/)
+- [Socket.io](https://socket.io/)
+- [Express.js](https://expressjs.com/)
+- [Electron](https://electronjs.org/)
+- [React](https://reactjs.org/)
+- [React Native](https://facebook.github.io/react-native/)
+- [Moment.js](http://momentjs.com/)
+- [SuperAgent](https://visionmedia.github.io/superagent/)
