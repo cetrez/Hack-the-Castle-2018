@@ -24,7 +24,7 @@ The projects are evaluated on four main criteria.
 - Wow-factor
 
 ## Days and times
-Some more informal activities may be added during the hackathon. 
+Some more informal activities may be added during the hackathon.
 
 |Time  | Activity                       |
 |---   | ---                            |
@@ -46,6 +46,19 @@ Some more informal activities may be added during the hackathon.
 A collection of useful links, you may of course use any other API you'd like.
 
 ### Social media API's
+- [Facebook](https://developers.facebook.com/)
+- [Twitter](https://developer.twitter.com/)
+- [Instagram](https://www.instagram.com/developer/)
+- [reddit](https://www.reddit.com/dev/api)
+- [Tumblr](https://www.tumblr.com/docs/en/api/v2)
+- [Youtube](https://developers.google.com/youtube/)
+- [Goodreads](https://www.goodreads.com/api)
+- [Meetup](https://www.meetup.com/meetup_api/auth/)
+- [Spotify](https://beta.developer.spotify.com/documentation/web-api/)
+- [Discord](https://discordapp.com/developers/docs/intro)
+- [Keybase](https://keybase.io/docs/api/1.0)
 
+### Tools
+[Localtunnel, Expose your computer to the internet](https://localtunnel.github.io/www/)
 
 ### Inspiration
