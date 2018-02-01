@@ -8,13 +8,31 @@
 [Sign up](http:/hack.cetrez.com) | [Register team](http:/hack.cetrez.com/teams) | [Chat on Slack](https://join.slack.com/t/cetrezhack2018/shared_invite/enQtMzA3MjEwMjE2NTUxLWY4NTc5N2NhMzk5M2Y5NGRiOTJlMWI3OTQ0OWI4YzI4Zjg0ZWUzZGU1NTQ2NzkxODVkNmRiNjVhODgxMmI2MGQ) | [Cetrez](http://cetrez.com/) | [digIT](http://github.com/cthit) | [ArmIT](https://chalmers.it/business/)
 ___
 **Hack the Castle** – *A social media hackathon*.  
-Winter hackathon at Cetrez Castle. A collaboration with [digIT](http://github.com/cthit) and [ArmIT](https://chalmers.it/business/).
+Winter hackathon at Cetrez Castle.
+A collaboration with [digIT](http://github.com/cthit) and [ArmIT](https://chalmers.it/business/).
 
 Use this repository as a starting point by forking it and start working.
 We will use the fork-tree to keep track of contestants.
 
 ## Rules
-Rules for the hackathon. Have fun!
+The most important thing is to have fun, if you are unsure about the rules don't
+hesitate to ask us.  
+- Every project must be a fork of the [hackathon repository](https://github.com/cetrez/Hack-the-Castle-2018)
+- No project can have been started prior to the hackathon, but you are welcome
+to use existing frameworks, libraries, boilerplates, etc.
+- The allowed groups size is 2 to 4 contestants
+- The last commit for the project shall be pushed to [github](https://github.com)
+before Saturday 18:00
+- Fill out the TEAM.md with your team and project information, then move it to
+`README.md`
+
+### Recommendations
+- Use libraries and frameworks
+- Make sure the team have an initial idea on Friday
+- We are here to help you, and so are [StackOverflow](https://stackoverflow.com)
+- Take breaks, have fun
+- Include everyone in the teamwork
+
 
 ## Criteria
 The projects are evaluated on four main criteria.
@@ -24,7 +42,7 @@ The projects are evaluated on four main criteria.
 - Wow-factor
 
 ## Days and times
-Some more informal activities may be added during the hackathon.
+Some more informal activities not in the schedule below may be added during the hackathon.
 
 |Time  | Activity                       |
 |---   | ---                            |
@@ -87,4 +105,3 @@ A collection of useful links, you may of course use any other API you'd like.
 - [A-Frame](https://aframe.io/)
 - [Moment.js](http://momentjs.com/)
 - [SuperAgent](https://visionmedia.github.io/superagent/)
-
