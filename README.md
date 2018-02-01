@@ -7,14 +7,14 @@
 
 [Sign up](http:/hack.cetrez.com) | [Register team](http:/hack.cetrez.com/teams) | [Chat on Slack](https://join.slack.com/t/cetrezhack2018/shared_invite/enQtMzA3MjEwMjE2NTUxLWY4NTc5N2NhMzk5M2Y5NGRiOTJlMWI3OTQ0OWI4YzI4Zjg0ZWUzZGU1NTQ2NzkxODVkNmRiNjVhODgxMmI2MGQ) | [Cetrez](http://cetrez.com/) | [digIT](http://github.com/cthit) | [ArmIT](https://chalmers.it/business/)
 ___
-**Hack the Castle** – *A social media hackathon*.  
+**♜ Hack the Castle** – *A social media hackathon*.  
 Winter hackathon at Cetrez Castle.
 A collaboration with [digIT](http://github.com/cthit) and [ArmIT](https://chalmers.it/business/).
 
 Use this repository as a starting point by forking it and start working.
 We will use the fork-tree to keep track of contestants.
 
-## Rules
+## ♜ Rules
 The most important thing is to have fun, if you are unsure about the rules don't
 hesitate to ask us.  
 - Every project must be a fork of the [hackathon repository](https://github.com/cetrez/Hack-the-Castle-2018)
@@ -34,15 +34,16 @@ before Saturday 18:00
 - Include everyone in the teamwork
 
 
-## Criteria
+### Criteria
 The projects are evaluated on four main criteria.
 - Business value
 - Design & UX
 - Technical Quality
 - Wow-factor
 
-## Days and times
-Some more informal activities not in the schedule below may be added during the hackathon.
+## ♜ Days & times
+Some more informal activities not in the schedule below may be added during the
+hackathon.
 
 |Time  | Activity                       |
 |---   | ---                            |
@@ -60,7 +61,7 @@ Some more informal activities not in the schedule below may be added during the 
 |20:00 | Winners are announced          |
 |20:30 ~ 23:00 | After Hack party       |
 
-## Links
+## ♜ Links & inspiration
 A collection of useful links, you may of course use any other API you'd like.
 
 ### Social media API's
@@ -76,16 +77,24 @@ A collection of useful links, you may of course use any other API you'd like.
 - [Spotify](https://beta.developer.spotify.com/documentation/web-api/)
 - [Discord](https://discordapp.com/developers/docs/intro)
 - [Keybase](https://keybase.io/docs/api/1.0)
+- [Alexa Skills Kit](https://developer.amazon.com/alexa-skills-kit)
 
-### Tools
+### Tools & services
+- [Dialogflow, Build natural and rich conversational experiences](https://dialogflow.com/)
+- [ChatFuel, Build a Facebook bot without coding](https://chatfuel.com/)
+- [wit.ai, Turn what your users say into actions](https://wit.ai/)
 - [Localtunnel, Expose your computer to the internet](https://localtunnel.github.io/www/)
 
-### Inspiration
+### Frameworks & libraries
+Some suggestions for frameworks and libraries to use, you may of course use  
+anything you like.
 
-### Python frameworks and libraries
-- [Flask](http://flask.pocoo.org/)
-- [Django](https://www.djangoproject.com/)
-- [Hug](http://www.hug.rest/)
+#### Python
+- [Rasa, natural language machine learning framework](https://rasa.com/)
+- [Flask, Web micro framework](http://flask.pocoo.org/)
+- [Flask-Ask, Alexa skills framework](https://github.com/johnwheeler/flask-ask/)
+- [Django, Web framework](https://www.djangoproject.com/)
+- [Hug, Web API framework](http://www.hug.rest/)
 - [Requests: HTTP for Humans](http://docs.python-requests.org/en/master/)
 - [Responses](https://github.com/getsentry/responses)
 - [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/)
@@ -93,7 +102,8 @@ A collection of useful links, you may of course use any other API you'd like.
 - [SQLAlchemy](http://www.sqlalchemy.org/)
 - [Natural Language Toolkit](http://www.nltk.org/)
 
-### Javascript frameworks and libraries
+#### JavaScript
+- [Botkit](https://www.botkit.ai/)
 - [Hapi.js](https://hapijs.com/)
 - [Socket.io](https://socket.io/)
 - [Express.js](https://expressjs.com/)
