@@ -56,7 +56,7 @@ hackathon.
 |08:00 - 09:00 | Breakfast              |
 |10:00 | Inspirational seminar – *Create a great project* |
 |12:00 | Lunch with Cetrez presentation |
-|14:00 – 17:00 | Mario Cart Tournament  |
+|14:00 – 17:00 | Mario Kart Tournament  |
 |18:00 | Last commit must be pushed     |
 |20:00 | Winners are announced          |
 |20:30 ~ 23:00 | After Hack party       |
