@@ -49,6 +49,7 @@ A collection of useful links, you may of course use any other API you'd like.
 - [Facebook](https://developers.facebook.com/)
 - [Twitter](https://developer.twitter.com/)
 - [Instagram](https://www.instagram.com/developer/)
+- [Pinterest](https://developers.pinterest.com/)
 - [reddit](https://www.reddit.com/dev/api)
 - [Tumblr](https://www.tumblr.com/docs/en/api/v2)
 - [Youtube](https://developers.google.com/youtube/)
@@ -81,5 +82,9 @@ A collection of useful links, you may of course use any other API you'd like.
 - [Electron](https://electronjs.org/)
 - [React](https://reactjs.org/)
 - [React Native](https://facebook.github.io/react-native/)
+- [react-native-arkit](https://github.com/HippoAR/react-native-arkit)
+- [AR.js](https://github.com/jeromeetienne/AR.js)
+- [A-Frame](https://aframe.io/)
 - [Moment.js](http://momentjs.com/)
 - [SuperAgent](https://visionmedia.github.io/superagent/)
+
