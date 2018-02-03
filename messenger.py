@@ -8,6 +8,8 @@ from config import CONFIG
 from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
 
+import models
+
 USER_SEQ = {}
 
 
@@ -41,6 +43,13 @@ def received_message(event):
     recipient_id = event.recipient_id
     time_of_message = event.timestamp
     message = event.message
+# cetrez
+    participant = models.get_participant(sender_id)
+    if participant is None:
+        profile = page.get_user_profile(sender_id)
+        name = "{} {}".format(profile['first_name'], profile['last_name'])
+        participant = models.create_participant(name, sender_id)
+# /cetrez
     print("Received message for user %s and page %s at %s with message:"
           % (sender_id, recipient_id, time_of_message))
     print(message)

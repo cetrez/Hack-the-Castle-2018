@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head  %}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='img/chatbot-icon.png') }}">
+	<title>{%block title %}Agent Smith{%endblock%}</title>
+
+
+	<!--STYLESHEET-->
+	<!--=================================================-->
+
+	<!--Open Sans Font [ OPTIONAL ] -->
+ 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
+
+
+	<!--Bootstrap Stylesheet [ REQUIRED ]-->
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+
+	<!--Nifty Stylesheet [ REQUIRED ]-->
+	<link href="{{ url_for('static', filename='css/nifty.min.css') }}" rel="stylesheet">
+
+
+	<!--Font Awesome [ OPTIONAL ]-->
+	<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+
+	<!--Nifty Stylesheet [ REQUIRED ]-->
+	<link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+
+	<!--SCRIPT-->
+	<!--=================================================-->
+
+	<!--Page Load Progress Bar [ OPTIONAL ]-->
+	<link href="{{ url_for('static', filename='css/pace.min.css') }}" rel="stylesheet">
+	<script src="{{ url_for('static', filename='js/pace.min.js') }}"></script>
+
+
+
+	<!--
+	REQUIRED
+	You must include this in your project.
+	RECOMMENDED
+	This category must be included but you may modify which plugins or components which should be included in your project.
+	OPTIONAL
+	Optional plugins. You may choose whether to include it in your project or not.
+	Detailed information and more samples can be found in the document.
+	-->
+
+    {% endblock %}
+</head>
+
+<!--TIPS-->
+<!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
+
+<body>
+	<div id="container" class="effect mainnav-lg">
+
+        <!--NAVBAR-->
+        <!--===================================================-->
+        <header id="navbar">
+            <div id="navbar-container" class="boxed">
+
+                <!--Brand logo & name-->
+                <!--================================-->
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand">
+                        <img src="{{ url_for('static', filename='img/chatbot-icon.png') }}" alt="Nifty Logo" class="brand-icon">
+                        <div class="brand-title dark-purple">
+                            <span class="brand-text">Agent Smith</span>
+                        </div>
+                    </a>
+                </div>
+                <!--================================-->
+                <!--End brand logo & name-->
+
+
+                <!--Navbar Dropdown-->
+                <!--================================-->
+                <div class="navbar-content clearfix">
+                    <ul class="nav navbar-top-links pull-left">
+
+                        <!--Navigation toogle button-->
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <li class="tgl-menu-btn">
+                            <a class="mainnav-toggle" href="/">
+                                <i class="fa fa-navicon fa-lg"></i>
+                            </a>
+                        </li>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--End Navigation toogle button-->
+                    </ul>
+                    <ul class="nav navbar-top-links pull-right">
+                    </ul>
+                </div>
+                <!--================================-->
+                <!--End Navbar Dropdown-->
+
+            </div>
+        </header>
+        <!--===================================================-->
+        <!--END NAVBAR-->
+
+		<div class="boxed">
+
+			<!--CONTENT CONTAINER-->
+			<!--===================================================-->
+			<div id="content-container">
+
+				<!--Page Title-->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<div id="page-title">
+					<h1 class="page-header text-overflow">{% block page_title %}AgentSmith{% endblock %}</h1>
+				</div>
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!--End page title-->
+
+
+				<!--Breadcrumb-->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				{%block breadcrumb %}
+				<ol class="breadcrumb">
+					<li><a href="#">Home</a></li>
+				</ol>
+				{%endblock %}
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!--End breadcrumb-->
+
+
+
+
+				<!--Page content-->
+				<!--===================================================-->
+				<div id="page-content">
+					{% block content %}
+					{% endblock %}
+				</div>
+				<!--===================================================-->
+				<!--End page content-->
+
+
+			</div>
+			<!--===================================================-->
+			<!--END CONTENT CONTAINER-->
+
+
+
+			<!--MAIN NAVIGATION-->
+			<!--===================================================-->
+			<nav id="mainnav-container">
+				<div id="mainnav" class="mint-dark">
+					<div id="mainnav-shortcut">
+					</div>
+
+
+					<!--Menu-->
+					<!--================================-->
+					<div id="mainnav-menu-wrap" class="mint-dark">
+						<div class="nano">
+							<div class="nano-content">
+								<ul id="mainnav-menu" class="list-group">
+									<!--Menu list item-->
+									<li>
+										<a href="/event">
+											<i class="fa fa-calendar"></i>
+											<span class="menu-title">Events</span>
+										</a>
+									</li>
+                                    <li>
+										<a href="/participant">
+											<i class="fa fa-user"></i>
+											<span class="menu-title">Participants</span>
+										</a>
+									</li>
+                                    <li>
+										<a href="/question">
+											<i class="fa fa-question-circle"></i>
+											<span class="menu-title">Questions</span>
+										</a>
+									</li>
+                                    <li>
+										<a href="/participants">
+											<i class="fa fa-archive"></i>
+											<span class="menu-title">Feedback</span>
+										</a>
+									</li>
+									<li>
+										<a href="/entity-tag">
+											<i class="fa fa-archive"></i>
+											<span class="menu-title">Entity Tags</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!--================================-->
+					<!--End menu-->
+
+				</div>
+			</nav>
+			<!--===================================================-->
+			<!--END MAIN NAVIGATION-->
+
+		</div>
+
+		<div class="modal-pause"></div>
+
+        <!-- FOOTER -->
+        <!--===================================================-->
+        <footer id="footer">
+            {% block footer %}
+            <!-- Visible when footer positions are fixed -->
+            <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+            <div class="show-fixed pull-right">
+                <ul class="footer-list list-inline">
+                    <li>
+                        <p class="text-sm">SEO Proggres</p>
+                        <div class="progress progress-sm progress-light-base">
+                            <div style="width: 80%" class="progress-bar progress-bar-danger"></div>
+                        </div>
+                    </li>
+
+                    <li>
+                        <p class="text-sm">Online Tutorial</p>
+                        <div class="progress progress-sm progress-light-base">
+                            <div style="width: 80%" class="progress-bar progress-bar-primary"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="btn btn-sm btn-dark btn-active-success">Checkout</button>
+                    </li>
+                </ul>
+            </div>
+
+            {% endblock %}
+        </footer>
+        <!--===================================================-->
+        <!-- END FOOTER -->
+
+
+        <!-- SCROLL TOP BUTTON -->
+        <!--===================================================-->
+        <button id="scroll-top" class="btn"><i class="fa fa-chevron-up"></i></button>
+        <!--===================================================-->
+
+
+
+	</div>
+	<!--===================================================-->
+	<!-- END OF CONTAINER -->
+
+
+
+
+	<!--JAVASCRIPT-->
+	<!--=================================================-->
+
+	<!--jQuery-->
+	<script src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
+
+
+	<!--BootstrapJS-->
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+
+	<!--Fast Click-->
+	<script src="{{ url_for('static', filename='js/fastclick.min.js') }}"></script>
+
+
+	<!--Nifty Admin-->
+	<script src="{{ url_for('static', filename='js/nifty.min.js') }}"></script>
+
+
+	<!--
+	<!--Client scripts-->
+    {%block scripts%}
+    {%endblock%}
+
+
+	<!--
+	REQUIRED
+	You must include this in your project.
+	RECOMMENDED
+	This category must be included but you may modify which plugins or components which should be included in your project.
+	OPTIONAL
+	Optional plugins. You may choose whether to include it in your project or not.
+	Detailed information and more samples can be found in the document.
+	-->
+</body>
+</html>
