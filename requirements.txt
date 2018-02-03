@@ -1,2 +1,4 @@
 flask
 requests
+pony
+flask_wtf
