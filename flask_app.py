@@ -30,8 +30,7 @@ def hello_world():
 @app.route('/event')
 def event():
     events = list()
-    events.append({'name': 'Event1', 'id': 2})
-    events.append({'name': 'Event2', 'id': 3})
+    events.append({'name': 'Hack the Castle', 'id': 1})
     return render_template('event.html', events=events)
 
 
@@ -85,7 +84,7 @@ def add_entity_tag():
         if form.validate_on_submit():
             # add question to db and display success page
             create_entitytag(form.tag_value.data, form.expressions.data)
-            return redirect(url_for('entitytag'))
+            return redirect(url_for('entity_tag'))
         return render_template('add-entitytag.html', form=form)
 
     # display add-question form
