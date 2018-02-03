@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/question">Question</a></li>
+    <li><a href="/add-question">Add-Question</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add new Questionn</h3>
+            </div>
+
+            <!--No Label Form-->
+            <!--===================================================-->
+            <form class="form-horizontal" action="/add-entity-tag" method="post">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 mar-btm">
+                            <label class="control-label">Tag Value</label>
+                            <input name="tag_value" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <textarea name="expressions"
+                              placeholder="Enter coma separated expressions here."
+                              rows="13"
+                              class="form-control"></textarea>
+                </div>
+                <div class="panel-footer text-right">
+                    <button class="btn btn-primary">Send message</button>
+                </div>
+                {{ form.csrf_token }}
+            </form>
+            <!--===================================================-->
+            <!--End No Label Form-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}

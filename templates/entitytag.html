@@ -2,7 +2,7 @@
 {%block breadcrumb %}
 <ol class="breadcrumb">
     <li><a href="/">Home</a></li>
-    <li><a href="/question">Questions</a></li>
+    <li><a href="/entity-tag">Questions</a></li>
 </ol>
 {%endblock %}
 {% block content %}
@@ -17,8 +17,8 @@
             <!--===================================================-->
             <div class="panel-body">
                 <div class="row pad-btm">
-                    <a href="/add-question">
-                        <button class="btn btn-info">Add new Question</button>
+                    <a href="/add-entity-tag">
+                        <button class="btn btn-info">Add new EntityTag</button>
                     </a>
                 </div>
 
@@ -27,18 +27,18 @@
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
+                                <th>TagValue</th>
+                                <th>Expressions</th>
                                 <th>Event</th>
-                                <th>Questionnaire</th>
-                                <th>Text</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for q in questions %}
+                            {% for e in entity_tags %}
                                 <tr>
-                                    <td class="text-center">{{q.id}}</td>
+                                    <td class="text-center">{{ e.id }}</td>
+                                    <td class="text-center">{{ e.tag_value }}</td>
+                                    <td class="text-center">{{ e.expressions }}</td>
                                     <td class="text-center"><span class="label label-warning">Cetrez</span></td>
-                                    <td class="text-center">Feedback</td>
-                                    <td class="text-center">{{ q.question }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

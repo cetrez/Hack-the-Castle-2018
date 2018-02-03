@@ -5,11 +5,10 @@ import messenger
 from config import CONFIG
 from fbpage import page
 from forms.question_form import QuestionForm
-from flask_wtf.csrf import CSRFProtect
-
+from forms.entitytag_form import EntityTagForm
+from models import *
 
 app = Flask(__name__)
-csrf = CSRFProtect(app)
 
 app.config.update(dict(
     SECRET_KEY="123456789",
@@ -18,6 +17,7 @@ app.config.update(dict(
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir)
+
 
 @app.route('/index')
 @app.route('/')
@@ -48,8 +48,7 @@ def participant():
 @app.route('/question')
 def question():
     questions = list()
-    questions.append({'id': 1, 'form': 'Feedback', 'text': 'What do you think about our event?'})
-    questions.append({'id': 2, 'form': 'Feedback', 'text': 'What would you improve?'})
+    questions = select_questions()
     return render_template('questions.html', questions=questions)
 
 
@@ -63,12 +62,40 @@ def add_question():
     if request.method == 'POST':
         if form.validate_on_submit():
             # add question to db and display success page
+            create_question(form.question_text.data)
             return redirect(url_for('question'))
         return render_template('add-question.html', categories=categories, form=form)
 
     # display add-question form
     return render_template('add-question.html', categories=categories, form=form)
 
+
+
+@app.route('/entity-tag')
+def entity_tag():
+    entity_tags = select_all_entitytag()
+    return render_template('entitytag.html', entity_tags=entity_tags)
+
+
+@app.route('/add-entity-tag', methods=['POST', 'GET'])
+def add_entity_tag():
+    form = EntityTagForm()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            # add question to db and display success page
+            create_entitytag(form.tag_value.data, form.expressions.data)
+            return redirect(url_for('entitytag'))
+        return render_template('add-entitytag.html', form=form)
+
+    # display add-question form
+    return render_template('add-entity-tag.html', form=form)
+
+
+@app.route('/test', methods=['GET'])
+def test():
+    q = select_questions()
+    return render_template('test.html', qv=q)
 
 
 @app.route('/webhook', methods=['GET'])
