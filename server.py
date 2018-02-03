@@ -1,20 +1,28 @@
 # coding: utf-8
 import os
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.sys.path.insert(0,parentdir)
-
 from flask import Flask, request, send_from_directory, render_template
-
 import messenger
 from config import CONFIG
 from fbpage import page
 
 app = Flask(__name__)
 
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.sys.path.insert(0,parentdir)
 
+@app.route('/index')
 @app.route('/')
 def hello_world():
-    return 'Hello from Flask-demo.'
+    author = "Me"
+    name = "You"
+    return render_template('index.html')
+
+@app.route('/event')
+def event():
+    events = list()
+    events.append({'name': 'Event1', 'id': 2})
+    events.append({'name': 'Event2', 'id': 3})
+    return render_template('event.html', events=events)
 
 @app.route('/webhook', methods=['GET'])
 def validate():
