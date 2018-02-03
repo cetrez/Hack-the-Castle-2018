@@ -2,29 +2,41 @@ from pony.orm import *
 
 db = Database()
 
+
 class Info(db.Entity):
+    id = PrimaryKey(int, auto=True)
     keywords = Required(str)
     text = Required(str)
 
+
 class EntityTags(db.Entity):
+    id = PrimaryKey(int, auto=True)
     tag_value = Required(str)
     expressions = Required(str)
 
+
 class Group(db.Entity):
+    id = PrimaryKey(int, auto=True)
     name = Required(str)
     participants = Set('Participant')
 
+
 class Participant(db.Entity):
+    id = PrimaryKey(int, auto=True)
     name = Required(str)
     fb_id = Required(str)
     group = Optional(Group)
 
+
 class Question(db.Entity):
+    id = PrimaryKey(int, auto=True)
     question = Required(str)
 
-class Feedback:
-    question = Required(Question)
-    participant = Required(Participant)
+
+class Feedback(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    participant = Required(str)
+    question = Optional(str)
     answer = Required(str)
 
 db.bind(provider='sqlite', filename='database.sqlite', create_db=True)

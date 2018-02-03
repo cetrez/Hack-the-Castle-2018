@@ -91,10 +91,10 @@ def add_entity_tag():
     return render_template('add-entity-tag.html', form=form)
 
 
-@app.route('/test', methods=['GET'])
-def test():
-    q = select_questions()
-    return render_template('test.html', qv=q)
+@app.route('/feedback', methods=['GET'])
+def feedback():
+    fbk = select_feedbacks()
+    return render_template('feedback.html', feedback=fbk)
 
 
 @app.route('/webhook', methods=['GET'])

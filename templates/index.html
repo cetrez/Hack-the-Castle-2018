@@ -3,87 +3,11 @@
 {% block content %}
     <div class="panel panel-mint">
         <!--Panel heading-->
-        <div class="panel-heading">
-            <div class="panel-control">
-
-                <!--Nav tabs-->
-                <ul class="nav nav-tabs">
-                    <li id="nav-tab1" class="active"><a data-toggle="tab" href="#tabs-box-1" aria-expanded="true">Input</a>
-                    </li>
-                    <li id="nav-tab2" class=""><a data-toggle="tab" href="#tabs-box-2" aria-expanded="false">Result</a>
-                    </li>
-                </ul>
-
-            </div>
-            <h3 class="panel-title">Request</h3>
-        </div>
 
         <!--Panel body-->
         <div class="panel-body">
-            <!--Tabs content-->
-            <div class="tab-content">
-                <div id="tabs-box-1" class="tab-pane fade active in">
-                    <form action="/algos/" id="create-request" method="post" enctype="multipart/form-data">
-
-                        <div class="row">
-                            <h4>Files</h4>
-                            <div class="col-md-6">
-
-                            </div>
-                            <div class="col-md-6">
-                                <i>Note: files should be in xlrd format, without missing values. Columns should contain the signal and the first row should consist of channel names.</i>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <hr>
-                            <h4>Length of signal(s)</h4>
-                            <div class="col-md-6">
-
-                            </div>
-                            <div class="col-md-6">
-                                <i>Note: algorithms are sensitive to the length of signal.</i><br>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <hr>
-                            <h4>Select algorithms</h4>
-                            <div class="col-md-12">
-                                <label class="form-checkbox form-normal form-primary active form-text">
-                                    <input checked="" type="checkbox" name="algos[]" value="1"> Hurst exponent
-                                </label>
-                                <label class="form-checkbox form-normal form-primary form-text">
-                                    <input type="checkbox" name="algos[]" value="2"> Logistic map
-                                </label>
-                                <label class="form-checkbox form-normal form-primary form-text">
-                                    <input type="checkbox" name="algos[]" value="3"> Fractal dimension
-                                </label>
-                                <label class="form-checkbox form-normal form-primary form-text">
-                                    <input type="checkbox" name="algos[]" value="4"> Complexity (cross table)
-                                </label>
-                                <label class="form-checkbox form-normal form-primary form-text">
-                                    <input type="checkbox" name="algos[]" value="5"> Complexity (LZW)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12" >
-                                <button class="btn btn-purple pull-right"
-                                        type="submit"
-                                        id="submit-create-request">Submit
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12" id="#results">
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div id="tabs-box-2" class="tab-pane fade">
-
-                </div>
-            </div>
+            <h1>Welcome to Smith Agent!</h1>
+            <h3>Use tabs to the left to navigate</h3>
         </div>
     </div>
 {% endblock %}
