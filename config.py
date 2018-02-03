@@ -1,5 +1,5 @@
 CONFIG = {
-    'FACEBOOK_TOKEN': 'EAAUwO5gmfIEBAPil8EPZA49fMovkBCnrLuDzAcbhGeGcZCQuNFgbr1RyqmOcIPSAqkrHHfBwjoqAD4dswi7IBF2QbvaDTnXwGwza7fW9Y5WHZBZB1mmCEZBfsBvjfKNS1JrHUvHvgsFLIzarHyoeNWYZCuYLAdsclMMkonfaaEi0tScpjvUrQL',
-    'VERIFY_TOKEN': 'verify_simsimbot',
-    'SERVER_URL': 'https://5264d467.ngrok.io'
+    'FACEBOOK_TOKEN': 'EAAEg9PWjtr8BAKzKdZCdrbmk1muVrVmZAjwqoZBKkzYsu7epGFtvZBTgCpQYJ8flGSxT146wpG6nIlZCaYDaw3kUdn17lVjH4tkMrSioNUiOJdOwZBZAh8JZCsIb3Jq3Awx0t7Q2RQM5jabgDHb6MK8mxoPJLcCcKTDrRWfzA2LT9gZDZD',
+    'VERIFY_TOKEN': '12345678901',
+    'SERVER_URL': 'https://dierme.pythonanywhere.com/'
 }

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Facebook Messenger Platform Sample (Python)
 https://github.com/fbsamples/messenger-platform-samples python porting version
 
@@ -25,8 +25,6 @@ python server.py
 # default web server port 8080
 ```
 
-=======
-
 <p align="center">
   <a href="http://hack.cetrez.com/"><img src="./images/logo.svg" alt="Hack the Castle" align="center" width="400"></a>
   <br />
@@ -35,7 +33,7 @@ python server.py
 
 [Sign up](http:/hack.cetrez.com) | [Register team](http:/hack.cetrez.com/teams) | [Chat on Slack](https://join.slack.com/t/cetrezhack2018/shared_invite/enQtMzA3MjEwMjE2NTUxLWY4NTc5N2NhMzk5M2Y5NGRiOTJlMWI3OTQ0OWI4YzI4Zjg0ZWUzZGU1NTQ2NzkxODVkNmRiNjVhODgxMmI2MGQ) | [Cetrez](http://cetrez.com/) | [digIT](http://github.com/cthit) | [ArmIT](https://chalmers.it/business/)
 ___
-**♜ Hack the Castle** – *A social media hackathon*.  
+**♜ Hack the Castle** – *A social media hackathon*.
 Winter hackathon at Cetrez Castle.
 A collaboration with [digIT](http://github.com/cthit) and [ArmIT](https://chalmers.it/business/).
 
@@ -44,7 +42,7 @@ We will use the fork-tree to keep track of contestants.
 
 ## ♜ Rules
 The most important thing is to have fun, if you are unsure about the rules don't
-hesitate to ask us.  
+hesitate to ask us.
 - Every project must be a fork of the [hackathon repository](https://github.com/cetrez/Hack-the-Castle-2018)
 - No project can have been started prior to the hackathon, but you are welcome
 to use existing frameworks, libraries, boilerplates, etc.
@@ -114,7 +112,7 @@ A collection of useful links, you may of course use any other API you'd like.
 - [Localtunnel, Expose your computer to the internet](https://localtunnel.github.io/www/)
 
 ### Frameworks & libraries
-Some suggestions for frameworks and libraries to use, you may of course use  
+Some suggestions for frameworks and libraries to use, you may of course use
 anything you like.
 
 #### Python
@@ -143,4 +141,3 @@ anything you like.
 - [A-Frame](https://aframe.io/)
 - [Moment.js](http://momentjs.com/)
 - [SuperAgent](https://visionmedia.github.io/superagent/)
->>>>>>> 4d26d4b4195851312fcebfa31638f1bac8416931
