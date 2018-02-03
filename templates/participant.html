@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Participants</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bordered table</h3>
+            </div>
+
+            <!--Bordered Table-->
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Name</th>
+                                <th>Facebook</th>
+                                <th>Event</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in participants %}
+                                <tr>
+                                    <td class="text-center">{{ p.id }}</td>
+                                    <td class="text-center">{{ p.name }}</td>
+                                    <td><a href="/participant/{{ p.id }}" class="btn-link">{{ p.fb_id }}</a></td>
+                                    <td><span class="label label-warning">Cetrez</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+            <!--End Bordered Table-->
+
+        </div>
+    </div>
+</div>
+
+{%endblock%}

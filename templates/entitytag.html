@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/entity-tag">Questions</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bordered table</h3>
+            </div>
+
+            <!--Bordered Table-->
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="row pad-btm">
+                    <a href="/add-entity-tag">
+                        <button class="btn btn-info">Add new EntityTag</button>
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>TagValue</th>
+                                <th>Expressions</th>
+                                <th>Event</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in entity_tags %}
+                                <tr>
+                                    <td class="text-center">{{ e.id }}</td>
+                                    <td class="text-center">{{ e.tag_value }}</td>
+                                    <td class="text-center">{{ e.expressions }}</td>
+                                    <td class="text-center"><span class="label label-warning">Cetrez</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+            <!--End Bordered Table-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}

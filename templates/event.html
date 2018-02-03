@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Events</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bordered table</h3>
+            </div>
+
+            <!--Bordered Table-->
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>User</th>
+                                <th>Plan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td><a href="#" class="btn-link">Scott S. Calabrese</a></td>
+                                <td><span class="label label-purple">Hackaton</span></td>
+                            </tr>
+                            {% for event in events %}
+                                <tr>
+                                    <td class="text-center">{{ event.id }}</td>
+                                    <td><a href="/event/{{ event.id }}" class="btn-link">{{ event.name }}</a></td>
+                                    <td><span class="label label-purple">Hackaton</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+            <!--End Bordered Table-->
+
+        </div>
+    </div>
+</div>
+
+{%endblock%}
