@@ -1,0 +1,36 @@
+'{"doc":"Organise a Team", "lookups":["trait"],
+       "id":"team_org", "values":[
+       {"value":"Team",
+       "expressions":["i need a teammate",
+                      "i need a new member",
+                      "i want to join a team",
+                      "i need a team"]}]}'
+
+'{"doc":"wifi password ", "lookups":["trait"],
+       "id":"wifi", "values":[
+       {"value":"Wifi",
+       "expressions":["i need the wifi password",
+                      "i need to connect to the wifi",
+                      "can i have the wifi password",
+                      "i want the wireless password",
+                      "i need internet connection"]}]}'
+
+'{"doc":"Time Schedule ", "lookups":["trait"],
+       "id":"Scheduling", "values":[
+       {"value":"Schedule",
+       "expressions":["i need the event schedule", "i need the event time plan", "can i have the planning", "when ", "what is happening now"]}]}'
+
+'{"doc":"Event map", "lookups":["trait"],
+       "id":"Map", "values":[
+       {"value":"Map",
+       "expressions":["i need the event map", "i m looking for", "where is ", "i need to go to ", "places"]}]}'
+
+'{"doc":"Event food", "lookups":["trait"],
+       "id":"Food", "values":[
+       {"value":"Food",
+       "expressions":["i need some coffee",
+                      "i m hungry",
+                      "food ",
+                      "i want to eat",
+                      "drink",
+                      "i m thirsty"]}]}'

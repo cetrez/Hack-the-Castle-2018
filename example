@@ -1,0 +1,6 @@
+curl -XPOST 'https://api.wit.ai/entities?v=20170307' \
+  -H "Authorization: Bearer KT4AR7CGRPLN47WP25YXMRJJ6IU6SNE2" \
+  -H "Content-Type: application/json" \
+  -d '{"doc":"A city that I like", "lookups":["trait"],
+       "id":"favorite_city", "values":[
+       {"value":"Paris", "expressions":["Favorite city", "City of Light","Capital of France"]}]}' 
