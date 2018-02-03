@@ -18,6 +18,7 @@ class Participant(db.Entity):
     name = Required(str)
     fb_id = Required(str)
     group = Optional(Group)
+    question = Optional(int)
 
 class Question(db.Entity):
     question = Required(str)
@@ -70,6 +71,9 @@ def create_feedback(q, p, a):
     f = Feedback(question=q, participant=p, answer=a)
     return f
 
+@db_session
+def update_participant(p_id, q):
+    Participant.get(id=p_id).question = q
 
 #---- EntityTags
 @db_session

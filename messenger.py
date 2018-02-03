@@ -57,6 +57,19 @@ def received_message(event):
             profile = page.get_user_profile(sender_id)
             name = "{} {}".format(profile['first_name'], profile['last_name'])
             participant = models.create_participant(name, sender_id)
+        if participant.question != None:
+            q = participant.question
+            question = models.select_questions()[q]
+            models.create_feedback(question, participant, message.get('text'))
+            q += 1
+            if q == len(models.select_questions()):
+                q = None
+                send_humanly(sender_id, 'Thank you for your feedback')
+            else:
+                send_humanly(sender_id, models.select_questions()[q+1].question)
+            models.update_participant(participant.id, q)
+            return
+
         nlp = message['nlp']
         labels = []
         if nlp is not None:
@@ -75,9 +88,9 @@ def received_message(event):
             else:
                 infos = models.select_info(label)
                 if len(infos) == 0:
-                    send_message(sender_id, "I'm just a bot, I don't know...")
+                    send_humanly(sender_id, "I'm just a bot, I don't know...")
                 else:
-                    send_message(sender_id, infos[0].text)
+                    send_humanly(sender_id, infos[0].text)
     except Exception, e:
         print('=' *80)
         print(str(e))
@@ -105,6 +118,9 @@ def received_message(event):
 
     if quick_reply:
         quick_reply_payload = quick_reply.get('payload')
+        if quick_reply_payload == 'PICK_OK':
+            models.update_participant(participant.id, 0)
+            send_humanly(sender_id, models.select_questions()[q+1].question)
         print("quick reply for message %s with payload %s" % (message_id, quick_reply_payload))
 
         page.send(sender_id, "Quick reply tapped")
