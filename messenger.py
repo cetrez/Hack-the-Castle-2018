@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+import time
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir)
 
@@ -37,6 +38,12 @@ def received_echo(event):
     print("Received echo for message %s and app %s with metadata %s" % (message_id, app_id, metadata))
 
 
+def send_humanly(sender_id, text):
+    send_typing_on(sender_id),
+    time.sleep(len(text.split(' '))/5.0)
+    send_message(sender_id, text)
+    send_typing_off(sender_id)
+
 @page.handle_message
 def received_message(event):
     sender_id = event.sender_id
@@ -44,11 +51,37 @@ def received_message(event):
     time_of_message = event.timestamp
     message = event.message
 # cetrez
-    participant = models.get_participant(sender_id)
-    if participant is None:
-        profile = page.get_user_profile(sender_id)
-        name = "{} {}".format(profile['first_name'], profile['last_name'])
-        participant = models.create_participant(name, sender_id)
+    try:
+        participant = models.get_participant(sender_id)
+        if participant is None:
+            profile = page.get_user_profile(sender_id)
+            name = "{} {}".format(profile['first_name'], profile['last_name'])
+            participant = models.create_participant(name, sender_id)
+        nlp = message['nlp']
+        labels = []
+        if nlp is not None:
+            for k, vs in nlp['entities'].items():
+                for v in vs:
+                    labels.append([ v['confidence'], v['value'] ])
+        if message.get('text') == 'SecretWord':
+            initiate_feedback()
+            return
+        if len(labels) != 0:
+            confidence, label = max(labels)
+            if label == 'Team':
+                send_humanly(sender_id, "We're looking for team member for you, please wait ...")
+                send_humanly(sender_id, "We found John, Zeus. meet them at 1st floor.")
+                models.select_participants()
+            else:
+                infos = models.select_info(label)
+                if len(infos) == 0:
+                    send_message(sender_id, "I'm just a bot, I don't know...")
+                else:
+                    send_message(sender_id, infos[0].text)
+    except Exception, e:
+        print('=' *80)
+        print(str(e))
+        print('=' *80)
 # /cetrez
     print("Received message for user %s and page %s at %s with message:"
           % (sender_id, recipient_id, time_of_message))
@@ -76,10 +109,10 @@ def received_message(event):
 
         page.send(sender_id, "Quick reply tapped")
 
-    if message_text:
-        send_message(sender_id, message_text)
-    elif message_attachments:
-        page.send(sender_id, "Message with attachment received")
+    #if message_text:
+        #send_message(sender_id, message_text)
+    #elif message_attachments:
+        #page.send(sender_id, "Message with attachment received")
 
 
 @page.handle_delivery
@@ -297,3 +330,10 @@ def send_account_linking(recipient):
 
 def send_text_message(recipient, text):
     page.send(recipient, text, metadata="DEVELOPER_DEFINED_METADATA")
+
+def initiate_feedback():
+    for p in models.select_participants():
+        page.send(p.fb_id, "We would appreciate your feedback!",
+                  quick_replies=[QuickReply(title="Okay", payload="PICK_OK"),
+                                 QuickReply(title="I'm busy", payload="PICK_NO")],
+                  metadata="DEVELOPER_DEFINED_METADATA")

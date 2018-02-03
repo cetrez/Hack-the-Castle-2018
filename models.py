@@ -45,6 +45,9 @@ def get_participant(fb_id):
 def select_participants():
     return select(p for p in Participant)[:]
 
+@db_session
+def select_info(keyword):
+    return select(i for i in Info if keyword in i.keywords)[:]
 
 #---- Questions
 @db_session
