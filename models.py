@@ -32,6 +32,10 @@ def create_participant(name, fb_id):
     return p
 
 @db_session
+def get_participant(fb_id):
+    return Participant.get(fb_id=fb_id)
+
+@db_session
 def select_participants():
     return select(p for p in Participant)[:]
 
