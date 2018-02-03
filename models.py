@@ -71,7 +71,7 @@ def create_feedback(q, p, a):
 #---- EntityTags
 @db_session
 def select_all_entitytag():
-    return select(p for p in Question)[:]
+    return select(p for p in EntityTags)[:]
 
 @db_session
 def create_entitytag(tv, exprs):
