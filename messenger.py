@@ -91,7 +91,7 @@ def received_message(event):
                     send_humanly(sender_id, "I'm just a bot, I don't know...")
                 else:
                     send_humanly(sender_id, infos[0].text)
-    except Exception, e:
+    except Exception:
         print('=' *80)
         print(str(e))
         print('=' *80)
