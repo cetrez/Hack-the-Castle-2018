@@ -4,13 +4,14 @@ from flask import Flask, request, send_from_directory, render_template, redirect
 import messenger
 from config import CONFIG
 from fbpage import page
-from forms.question_form import QuestionForm
-from forms.entitytag_form import EntityTagForm
+from forms.create_forms import InfoForm, QuestionForm, EntityTagForm
+from models.all_models import *
+from models.DataBase import DataBase
 from EntityManager import addEntity
-from models import *
 
+
+DataBase.generate()
 app = Flask(__name__)
-
 app.config.update(dict(
     SECRET_KEY=CONFIG['SECRET_KEY'],
     WTF_CSRF_SECRET_KEY=CONFIG['WTF_CSRF_SECRET_KEY']
@@ -37,7 +38,7 @@ def event():
 # displays all participants
 @app.route('/participant')
 def participant():
-    participants = select_participants()
+    participants = Participant.select_all_participants()
     participants.append({'name': 'Tulga Ariuntuya', 'id': 2, 'fb_id': 982936161761293})
     participants.append({'name': 'Gunnar Stenlund', 'id': 3, 'fb_id': 1386169068167016})
     participants.append({'name': 'Mohamed Hassainia', 'id': 4, 'fb_id': 100013370437252})
@@ -47,7 +48,7 @@ def participant():
 # displays all questions
 @app.route('/question')
 def question():
-    questions = select_questions()
+    questions = Question.select_all_questions()
     return render_template('questions.html', questions=questions)
 
 
@@ -73,7 +74,7 @@ def add_question():
 # display all entity-tags
 @app.route('/entity-tag')
 def entity_tag():
-    entity_tags = select_all_entitytag()
+    entity_tags = EntityTags.select_all_entitytag()
     return render_template('entitytag.html', entity_tags=entity_tags)
 
 
@@ -94,7 +95,7 @@ def add_entity_tag():
             addEntity(tag, expressions)
 
             # add question to db and display success page
-            create_entitytag(form.tag_value.data, form.expressions.data)
+            EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
 
             return redirect(url_for('entity_tag'))
 
@@ -107,8 +108,8 @@ def add_entity_tag():
 # display all info
 @app.route('/info')
 def info():
-    info = select_all_entitytag()
-    return render_template('entitytag.html', entity_tags=entity_tags)
+    info = Info.select_all_info()
+    return render_template('info.html', entity_tags=info)
 
 
 # add new info
@@ -128,7 +129,7 @@ def add_info():
             addEntity(tag, expressions)
 
             # add question to db and display success page
-            create_entitytag(form.tag_value.data, form.expressions.data)
+            Info.create_info(form.tag_value.data, form.expressions.data)
 
             return redirect(url_for('entity_tag'))
 
@@ -138,11 +139,10 @@ def add_info():
     return render_template('add-entity-tag.html', form=form)
 
 
-
 # displaying all feedback
 @app.route('/feedback', methods=['GET'])
 def feedback():
-    fbk = select_feedbacks()
+    fbk = Feedback.select_all_feedback()
     return render_template('feedback.html', feedback=fbk)
 
 
@@ -190,4 +190,4 @@ def assets(path):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True, threaded=True)
+    app.run(host='127.0.0.1', port=5001, debug=True, threaded=True)
