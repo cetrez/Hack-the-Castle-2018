@@ -5,14 +5,15 @@ db = Database()
 
 class Info(db.Entity):
     id = PrimaryKey(int, auto=True)
-    keywords = Required(str)
-    text = Required(str)
+    tags = Set('EntityTags')
+    event = Required(str)
 
 
 class EntityTags(db.Entity):
     id = PrimaryKey(int, auto=True)
     tag_value = Required(str)
     expressions = Required(str)
+    info = Optional(Info)
 
 
 class Group(db.Entity):
@@ -32,37 +33,49 @@ class Participant(db.Entity):
 class Question(db.Entity):
     id = PrimaryKey(int, auto=True)
     question = Required(str)
+    feedback = Optional('Feedback')
 
 
 class Feedback(db.Entity):
     id = PrimaryKey(int, auto=True)
     participant = Required(str)
-    question = Optional(str)
+    question = Optional(Question)
     answer = Required(str)
+
 
 db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 db.generate_mapping(create_tables=True)
 
 
-#---- Participants
+# ---- Participants
 @db_session
 def create_participant(name, fb_id):
     p = Participant(name=name, fb_id=fb_id)
     return p
 
+
 @db_session
 def get_participant(fb_id):
     return Participant.get(fb_id=fb_id)
+
 
 @db_session
 def select_participants():
     return select(p for p in Participant)[:]
 
+
+# ---- Info
 @db_session
 def select_info(keyword):
     return select(i for i in Info if keyword in i.keywords)[:]
 
-#---- Questions
+
+def create_info(name, fb_id):
+    p = Participant(name=name, fb_id=fb_id)
+    return p
+
+
+# ---- Questions
 @db_session
 def select_questions():
     return select(p for p in Question)[:]
@@ -73,24 +86,28 @@ def create_question(q):
     return p
 
 
-#---- Feedback
+# ---- Feedback
 @db_session
 def select_feedbacks():
     return select(p for p in Feedback)[:]
+
 
 @db_session
 def create_feedback(q, p, a):
     f = Feedback(question=q, participant=p, answer=a)
     return f
 
+
 @db_session
 def update_participant(p_id, q):
     Participant.get(id=p_id).question = q
 
-#---- EntityTags
+
+# ---- EntityTags
 @db_session
 def select_all_entitytag():
     return select(p for p in EntityTags)[:]
+
 
 @db_session
 def create_entitytag(tv, exprs):

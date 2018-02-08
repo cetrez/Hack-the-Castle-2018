@@ -104,6 +104,41 @@ def add_entity_tag():
     return render_template('add-entity-tag.html', form=form)
 
 
+# display all info
+@app.route('/info')
+def info():
+    info = select_all_entitytag()
+    return render_template('entitytag.html', entity_tags=entity_tags)
+
+
+# add new info
+@app.route('/add-info', methods=['POST', 'GET'])
+def add_info():
+    form = InfoForm()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+
+            # preprocessing data
+            # not best, but works for now xD
+            expressions = form.expressions.data.split(",")
+            tag = form.tag_value.data
+
+            # adding entity to fb app
+            addEntity(tag, expressions)
+
+            # add question to db and display success page
+            create_entitytag(form.tag_value.data, form.expressions.data)
+
+            return redirect(url_for('entity_tag'))
+
+        return render_template('add-entitytag.html', form=form)
+
+    # display add-question form
+    return render_template('add-entity-tag.html', form=form)
+
+
+
 # displaying all feedback
 @app.route('/feedback', methods=['GET'])
 def feedback():
@@ -155,4 +190,4 @@ def assets(path):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5003, debug=True, threaded=True)
+    app.run(host='127.0.0.1', port=5000, debug=True, threaded=True)
