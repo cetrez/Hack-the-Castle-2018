@@ -17,7 +17,7 @@
             <!--===================================================-->
             <div class="panel-body">
                 <div class="row pad-btm">
-                    <a href="/add-question">
+                    <a href="/add-info">
                         <button class="btn btn-info">Add new Info</button>
                     </a>
                 </div>
@@ -27,18 +27,20 @@
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
-                                <th>Event</th>
-                                <th>Questionnaire</th>
-                                <th>Text</th>
+                                <th class="text-center">Entity Tag</th>
+                                <th class="text-center">Text</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for i in info %}
                                 <tr>
                                     <td class="text-center">{{i.id}}</td>
-                                    <td class="text-center"><span class="label label-warning">Cetrez</span></td>
-                                    <td class="text-center">Feedback</td>
-                                    <td class="text-center">{{ i.text }}</td>
+                                    <td class="text-center">
+                                        {% for tv in i.tag.tag_value %}
+                                            {{tv}}
+                                        {% endfor %}
+                                    </td>
+                                    <td class="text-center">{{ i.info_text }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

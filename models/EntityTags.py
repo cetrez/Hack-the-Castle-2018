@@ -18,6 +18,12 @@ class EntityTags(db.Entity):
 
     @staticmethod
     @db_session
+    def select_entitytag(_id):
+        et = EntityTags[_id]
+        return EntityTags[_id]
+
+    @staticmethod
+    @db_session
     def create_entitytag(tv, exprs):
         et = EntityTags(tag_value=tv, expressions=exprs)
         return et

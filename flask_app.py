@@ -6,8 +6,8 @@ from config import CONFIG
 from fbpage import page
 from forms.create_forms import InfoForm, QuestionForm, EntityTagForm
 from models.all_models import *
-from models.DataBase import DataBase
 from EntityManager import addEntity
+from models.DataBase import DataBase
 
 
 DataBase.generate()
@@ -16,7 +16,6 @@ app.config.update(dict(
     SECRET_KEY=CONFIG['SECRET_KEY'],
     WTF_CSRF_SECRET_KEY=CONFIG['WTF_CSRF_SECRET_KEY']
 ))
-
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0, parentdir)
 
@@ -63,9 +62,8 @@ def add_question():
     if request.method == 'POST':
         if form.validate_on_submit():
             # add question to db and display question page
-            create_question(form.question_text.data)
+            Question.create_question(form.question_text.data)
             return redirect(url_for('question'))
-        return render_template('add-question.html', categories=categories, form=form)
 
     # display add-question form
     return render_template('add-question.html', categories=categories, form=form)
@@ -108,35 +106,23 @@ def add_entity_tag():
 # display all info
 @app.route('/info')
 def info():
-    info = Info.select_all_info()
-    return render_template('info.html', entity_tags=info)
+    all_info = Info.select_all_info()
+    return render_template('info.html', info=all_info)
 
 
 # add new info
 @app.route('/add-info', methods=['POST', 'GET'])
 def add_info():
     form = InfoForm()
-
+    entity_tags = EntityTags.select_all_entitytag()
     if request.method == 'POST':
         if form.validate_on_submit():
-
-            # preprocessing data
-            # not best, but works for now xD
-            expressions = form.expressions.data.split(",")
-            tag = form.tag_value.data
-
-            # adding entity to fb app
-            addEntity(tag, expressions)
-
-            # add question to db and display success page
-            Info.create_info(form.tag_value.data, form.expressions.data)
-
-            return redirect(url_for('entity_tag'))
-
-        return render_template('add-entitytag.html', form=form)
+            # adding info to db
+            Info.create_info(form.tag_id.data, form.info_text.data)
+            return redirect(url_for('info'))
 
     # display add-question form
-    return render_template('add-entity-tag.html', form=form)
+    return render_template('add-info.html', form=form, etgs = entity_tags)
 
 
 # displaying all feedback

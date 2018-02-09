@@ -9,8 +9,8 @@ class EntityTagForm(Form):
 
 
 class InfoForm(Form):
-    cat_id = IntegerField('Category', validators=[DataRequired()])
-    question_text = StringField('Text', validators=[DataRequired()])
+    tag_id = IntegerField('Category', validators=[DataRequired()])
+    info_text = StringField('Text', validators=[DataRequired()])
 
 
 class QuestionForm(Form):
