@@ -1,5 +1,6 @@
 from pony.orm import *
 from models.DataBase import DataBase
+from models.EntityTags import EntityTags
 
 db = DataBase.get_database()
 
@@ -8,8 +9,16 @@ class Questionnaire(db.Entity):
     id = PrimaryKey(int, auto=True)
     event = Required(str)
     title = Required(str)
+    tag = Optional('EntityTags')
     questions = Set('Question')
     bot_state = Optional('State')
+
+    @staticmethod
+    @db_session
+    def get_questionnaire(keyword):
+        et = EntityTags.get(tag_value=keyword)
+        q = Questionnaire.get(tag=et)
+        return q
 
     @staticmethod
     @db_session
@@ -28,6 +37,7 @@ class Questionnaire(db.Entity):
 
     @staticmethod
     @db_session
-    def create_questionnaire(title):
-        p = Questionnaire(title=title, event='Hack the castle')
-        return p
+    def create_questionnaire(title, et_id):
+        et = EntityTags[et_id]
+        q = Questionnaire(title=title, tag=et, event='Hack the castle')
+        return q

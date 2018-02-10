@@ -143,8 +143,13 @@ def add_info():
 # display all questionnaires
 @app.route('/questionnaire')
 def questionnaire():
-    questionnaires = Questionnaire.select_all_questionnaires()
-    return render_template('questionnaire.html', qstnnrs=questionnaires)
+    # --- example of how to get questionnaire by keyword and get the n of questions ---
+    # qstnnr = Questionnaire.get_questionnaire('coffee')
+    # q = Questionnaire.select_all_questions(qstnnr.id)
+    # print(len(q.questions))
+
+    return render_template('questionnaire.html',
+                           qstnnrs=Questionnaire.select_all_questionnaires())
 
 
 # add new questionnaire
@@ -154,11 +159,12 @@ def add_questionnaire():
     if request.method == 'POST':
         if form.validate_on_submit():
             # adding info to db
-            Questionnaire.create_questionnaire(form.title.data)
+            Questionnaire.create_questionnaire(form.title.data, form.tag_id.data)
             return redirect(url_for('questionnaire'))
 
     # display add-question form
-    return render_template('add-questionnaire.html', form=form)
+    return render_template('add-questionnaire.html', form=form,
+                           et=EntityTags.select_all_entitytag())
 
 
 # trigger sending questionnaire to all users of active event

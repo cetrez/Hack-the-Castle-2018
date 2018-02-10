@@ -24,6 +24,15 @@
                             <input name="title" type="text" class="form-control">
                         </div>
                     </div>
+                    <label class="control-label">{{form.tag_id.label}}</label>
+                    <div class="row">
+                        <select name="tag_id">
+                               <option value="0">*select*</option>
+                            {% for e in et %}
+                               <option value="{{e.id}}">{{e.tag_value}}</option>
+                            {% endfor %}
+                            </select>
+                    </div>
                 </div>
                 <div class="panel-footer text-right">
                     <button class="btn btn-primary">Add</button>
