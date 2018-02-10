@@ -7,7 +7,7 @@ db = DataBase.get_database()
 
 class Info(db.Entity):
     id = PrimaryKey(int, auto=True)
-    tag = Set('EntityTags')
+    tag = Required('EntityTags')
     info_text = Required(str)
 
     @staticmethod
@@ -22,8 +22,10 @@ class Info(db.Entity):
     @db_session
     def get_info(keyword):
         et = EntityTags.get(tag_value=keyword)
-        i = Info.get(tag=et)
-        return i
+        if et is not None:
+            i = Info.get(tag=et)
+            return i
+        return None
 
     @staticmethod
     @db_session

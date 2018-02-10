@@ -27,6 +27,7 @@ def index():
         session['count'] += 1
     else:
         session['count'] = 0
+
     return render_template('index.html', count=session['count'])
 
 
