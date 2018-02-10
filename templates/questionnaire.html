@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/info">Info</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Questionnaire</h3>
+            </div>
+
+            <!--Bordered Table-->
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="row pad-btm">
+                    <a href="/add-questionnaire">
+                        <button class="btn btn-info">Add new Questionnaire</button>
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Event</th>
+                                <th class="text-center">Title</th>
+                                <th class="text-center">№ questions</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in qstnnrs %}
+                                <tr>
+                                    <td class="text-center">{{q.id}}</td>
+                                    <td class="text-center">{{q.event}}</td>
+                                    <td class="text-center">{{ q.title }}</td>
+                                    <td class="text-center">{{q.questions|length}}</td>
+                                    <td class="text-center">
+                                        <a href="/senq-questionnaire/{{q.id}}">
+                                            <button class="btn btn-info">Send</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+            <!--End Bordered Table-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}

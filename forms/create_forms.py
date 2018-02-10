@@ -14,5 +14,9 @@ class InfoForm(Form):
 
 
 class QuestionForm(Form):
-    cat_id = IntegerField('Category', validators=[DataRequired()])
+    qstnnr_id = IntegerField('Category', validators=[DataRequired()])
     question_text = StringField('Text', validators=[DataRequired()])
+
+
+class QuestionnaireForm(Form):
+    title = StringField('Title', validators=[DataRequired()])

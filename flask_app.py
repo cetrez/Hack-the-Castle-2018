@@ -4,7 +4,7 @@ from flask import Flask, request, send_from_directory, render_template, redirect
 import messenger
 from config import CONFIG
 from fbpage import page
-from forms.create_forms import InfoForm, QuestionForm, EntityTagForm
+from forms.create_forms import InfoForm, QuestionForm, EntityTagForm, QuestionnaireForm
 from models.all_models import *
 from EntityManager import addEntity
 from models.DataBase import DataBase
@@ -55,18 +55,16 @@ def question():
 @app.route('/add-question', methods=['POST', 'GET'])
 def add_question():
     form = QuestionForm()
-    categories = list()
-    categories.append({'id': 1, 'name': 'Feedback'})
-    categories.append({'id': 1, 'name': 'Find team'})
+    questionnaire = Questionnaire.select_all_questionnaires()
 
     if request.method == 'POST':
         if form.validate_on_submit():
             # add question to db and display question page
-            Question.create_question(form.question_text.data)
+            Question.create_question(form.question_text.data, form.qstnnr_id.data)
             return redirect(url_for('question'))
 
     # display add-question form
-    return render_template('add-question.html', categories=categories, form=form)
+    return render_template('add-question.html', categories=questionnaire, form=form)
 
 
 # display all entity-tags
@@ -121,8 +119,29 @@ def add_info():
             Info.create_info(form.tag_id.data, form.info_text.data)
             return redirect(url_for('info'))
 
+    # display add-info form
+    return render_template('add-info.html', form=form, etgs=entity_tags)
+
+
+# display all questionnaires
+@app.route('/questionnaire')
+def questionnaire():
+    questionnaires = Questionnaire.select_all_questionnaires()
+    return render_template('questionnaire.html', qstnnrs=questionnaires)
+
+
+# add new info
+@app.route('/add-questionnaire', methods=['POST', 'GET'])
+def add_questionnaire():
+    form = QuestionnaireForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            # adding info to db
+            Questionnaire.create_questionnaire(form.title.data)
+            return redirect(url_for('questionnaire'))
+
     # display add-question form
-    return render_template('add-info.html', form=form, etgs = entity_tags)
+    return render_template('add-questionnaire.html', form=form)
 
 
 # displaying all feedback
