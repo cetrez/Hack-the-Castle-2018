@@ -7,7 +7,7 @@ db = DataBase.get_database()
 class Participant(db.Entity):
     id = PrimaryKey(int, auto=True)
     name = Required(str)
-    fb_id = Required(int)
+    fb_id = Required(str)
     group = Optional('Group')
     question = Optional(int)
     feedback = Set('Feedback')
