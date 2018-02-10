@@ -9,6 +9,7 @@ class EntityTags(db.Entity):
     tag_value = Required(str)
     expressions = Required(str)
     info = Optional('Info')
+    qstnnr = Optional('Questionnaire')
 
     # ---- Query
     @staticmethod
