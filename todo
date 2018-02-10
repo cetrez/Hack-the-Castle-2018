@@ -1,5 +1,5 @@
 
-#TODO
+#Old TODO
 1. Polishing bot profile + welcoming message
 2. Bot provides general information about event
 3. Provide scheduled messages                       #Gunnar
@@ -17,3 +17,16 @@ ps -A | grep [the app that is listening to the port of interest]
 kill -9 [ps pid]
 
 All these need super user
+
+#TODO
+Save answers to DB                                                      #Gunnar
+helper function retrieve questions                                      #Gunnar
+replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar
+only trigger quest on keyword                                           #Gunnar
+
+(message all user)                                                      #Gunnar, Alex
+trigger questioneer from gui (link send_questionnaire(qstnnr_id) in flask_app)  #Gunnar
+
+WIT                                                                     #Mohammed
+
+Setting up server for presentation                                      #Alex

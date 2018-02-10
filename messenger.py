@@ -10,9 +10,11 @@ from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
 from flask import g
 import models
+from models.all_models import *
 
 USER_SEQ = {}
 
+CONFIDENCE_THRESHOLD = 0.8
 
 @page.handle_optin
 def received_authentication(event):
@@ -66,12 +68,23 @@ def received_message(event):
 
     # Retrieve labels
     nlp = message['nlp']
-    labels = []
+    keyword = "Null" #Temporary, TODO concider this
+    confidence = 0
     if nlp is not None:
-        for k, vs in nlp['entities'].items():
-            for v in vs:
-                labels.append([v['confidence'], v['value']])
+        items = nlp['entities'] #We're expecting only one item. Facebook dev settings, Built-In NLP
+                                #However, seems I cant access item0, need to iterate through instead
+        for ent_id in items:
+            #ent_id is a string containing the entity id
+            keyword = items[ent_id][0]['value']
+            confidence = items[ent_id][0]['confidence']
+            
+    print("Keyword = " + keyword + ", Confidence = " + str(confidence))
+    
+    #TODO Dummy
+    #keyword = "Coffee"
+    #confidence = 1
 
+    #TODO Not sure about the details
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
         print("Ignore duplicated request")
@@ -79,17 +92,7 @@ def received_message(event):
     else:
         USER_SEQ[seq_id] = seq
 
-    if quick_reply:
-        quick_reply_payload = quick_reply.get('payload')
-        print("quick reply for message %s with payload %s" % (message_id, quick_reply_payload))
-
-        page.send(sender_id, "Quick reply tapped")
-
-    if message_text:
-        send_message(sender_id, message_text)
-    elif message_attachments:
-        page.send(sender_id, "Message with attachment received")
-
+    bot_receive(event, keyword, confidence)
 
 @page.handle_delivery
 def received_delivery_confirmation(event):
@@ -313,3 +316,51 @@ def initiate_feedback():
                   quick_replies=[QuickReply(title="Okay", payload="PICK_OK"),
                                  QuickReply(title="I'm busy", payload="PICK_NO")],
                   metadata="DEVELOPER_DEFINED_METADATA")
+                  
+def bot_receive(event, keyword, confidence):
+    #Put new participants in DB
+    bot_log_participant(event.sender_id)
+    
+    #Info state - messenger replies user with info from database
+    print(str(confidence) + " " + str(CONFIDENCE_THRESHOLD))
+    if(confidence >= CONFIDENCE_THRESHOLD):
+        info = Info.get_info(keyword)
+        page.send(event.sender_id, info.info_text)
+        
+    #Testing state functionality
+    current_state = State.get_state(event.sender_id)
+    if(current_state is None):
+        current_state = State.create_state(event.sender_id, 1)
+        print("State created")
+        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
+        questions = Question.select_all_questions()
+        
+        #send first question
+        #print(questions[0].question)
+        page.send(event.sender_id, str(current_state.q_numb))
+        page.send(event.sender_id, questions[0].question)
+        page.send(event.sender_id, "state created")
+    else:
+        #Put answer in DB
+        #Iterate state
+        current_state = State.inc_state(event.sender_id)
+        page.send(event.sender_id, "state incremented {}".format(current_state.q_numb))
+        #Ask next question or thank user
+        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
+        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id).questions
+        questions = Question.select_all_questions()
+        print(questions)
+        if(current_state.q_numb >= len(questions)):
+            page.send(event.sender_id, "Thank you")
+            page.send(event.sender_id, str(current_state.q_numb))
+            State.delete_state(event.sender_id)
+        else:
+            page.send(event.sender_id, str(current_state.q_numb))
+            page.send(event.sender_id, questions[current_state.q_numb].question)        
+        
+def bot_log_participant(fb_id) :
+    participant = Participant.get_participant(fb_id)
+    if participant is None:
+        profile = page.get_user_profile(fb_id)
+        name = "{} {}".format(profile['first_name'], profile['last_name'])
+        participant = Participant.create_participant(name, fb_id)
