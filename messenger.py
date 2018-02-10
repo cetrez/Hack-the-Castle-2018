@@ -8,7 +8,7 @@ import json
 from config import CONFIG
 from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
-
+from flask import session
 import models
 
 USER_SEQ = {}
@@ -44,58 +44,13 @@ def send_humanly(sender_id, text):
     send_message(sender_id, text)
     send_typing_off(sender_id)
 
+
 @page.handle_message
 def received_message(event):
     sender_id = event.sender_id
     recipient_id = event.recipient_id
     time_of_message = event.timestamp
     message = event.message
-# cetrez
-    try:
-        participant = models.get_participant(sender_id)
-        if participant is None:
-            profile = page.get_user_profile(sender_id)
-            name = "{} {}".format(profile['first_name'], profile['last_name'])
-            participant = models.create_participant(name, sender_id)
-        if participant.question != None:
-            q = participant.question
-            question = models.select_questions()[q]
-            models.create_feedback(question, participant, message.get('text'))
-            q += 1
-            if q == len(models.select_questions()):
-                q = None
-                send_humanly(sender_id, 'Thank you for your feedback')
-            else:
-                send_humanly(sender_id, models.select_questions()[q+1].question)
-            models.update_participant(participant.id, q)
-            return
-
-        nlp = message['nlp']
-        labels = []
-        if nlp is not None:
-            for k, vs in nlp['entities'].items():
-                for v in vs:
-                    labels.append([ v['confidence'], v['value'] ])
-        if message.get('text') == 'SecretWord':
-            initiate_feedback()
-            return
-        if len(labels) != 0:
-            confidence, label = max(labels)
-            if label == 'Team':
-                send_humanly(sender_id, "We're looking for team member for you, please wait ...")
-                send_humanly(sender_id, "We found John, Zeus. meet them at 1st floor.")
-                models.select_participants()
-            else:
-                infos = models.select_info(label)
-                if len(infos) == 0:
-                    send_humanly(sender_id, "I'm just a bot, I don't know...")
-                else:
-                        send_humanly(sender_id, infos[0].text)
-    except Exception:
-        print('=' *80)
-        print(str(e))
-        print('=' *80)
-# /cetrez
     print("Received message for user %s and page %s at %s with message:"
           % (sender_id, recipient_id, time_of_message))
     print(message)
@@ -109,6 +64,20 @@ def received_message(event):
     message_attachments = message.get("attachments")
     quick_reply = message.get("quick_reply")
 
+    # set counter
+    if 'count' in session:
+        session['count'] += 1
+    else:
+        session['count'] = 0
+
+    # Retrieve labels
+    nlp = message['nlp']
+    labels = []
+    if nlp is not None:
+        for k, vs in nlp['entities'].items():
+            for v in vs:
+                labels.append([v['confidence'], v['value']])
+
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
         print("Ignore duplicated request")
@@ -118,17 +87,14 @@ def received_message(event):
 
     if quick_reply:
         quick_reply_payload = quick_reply.get('payload')
-        if quick_reply_payload == 'PICK_OK':
-            models.update_participant(participant.id, 0)
-            send_humanly(sender_id, models.select_questions()[q+1].question)
         print("quick reply for message %s with payload %s" % (message_id, quick_reply_payload))
 
         page.send(sender_id, "Quick reply tapped")
 
-    #if message_text:
-        #send_message(sender_id, message_text)
-    #elif message_attachments:
-        #page.send(sender_id, "Message with attachment received")
+    if message_text:
+        send_message(sender_id, message_text + " This is your {} message! Welcome".format(session['count']))
+    elif message_attachments:
+        page.send(sender_id, "Message with attachment received")
 
 
 @page.handle_delivery

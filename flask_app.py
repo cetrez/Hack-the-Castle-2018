@@ -1,6 +1,6 @@
 # coding: utf-8
 import os
-from flask import Flask, request, send_from_directory, render_template, redirect, url_for
+from flask import Flask, request, send_from_directory, render_template, redirect, url_for, session
 import messenger
 from config import CONFIG
 from fbpage import page
@@ -23,7 +23,11 @@ os.sys.path.insert(0, parentdir)
 @app.route('/index')
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'count' in session:
+        session['count'] += 1
+    else:
+        session['count'] = 0
+    return render_template('index.html', count=session['count'])
 
 
 # --------- Event -------
