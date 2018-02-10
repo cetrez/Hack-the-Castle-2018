@@ -7,10 +7,11 @@ db = DataBase.get_database()
 class Participant(db.Entity):
     id = PrimaryKey(int, auto=True)
     name = Required(str)
-    fb_id = Required(str)
+    fb_id = Required(int)
     group = Optional('Group')
     question = Optional(int)
     feedback = Set('Feedback')
+    bot_state = Optional('State')
 
     # ---- Query
     @staticmethod

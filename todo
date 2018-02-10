@@ -8,3 +8,12 @@
 6. NLP tasks                                        #Mohammad
 7. Backend for the bot                              #Alex
 8. Bot DB                                           #Tolga
+
+
+useful script
+lsof -I #used to list info on port listen and all that crap
+lsof -i | grep [port]
+ps -A | grep [the app that is listening to the port of interest]
+kill -9 [ps pid]
+
+All these need super user

@@ -8,7 +8,7 @@ import json
 from config import CONFIG
 from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
-from flask import session
+from flask import g
 import models
 
 USER_SEQ = {}
@@ -64,12 +64,6 @@ def received_message(event):
     message_attachments = message.get("attachments")
     quick_reply = message.get("quick_reply")
 
-    # set counter
-    if 'count' in session:
-        session['count'] += 1
-    else:
-        session['count'] = 0
-
     # Retrieve labels
     nlp = message['nlp']
     labels = []
@@ -92,7 +86,7 @@ def received_message(event):
         page.send(sender_id, "Quick reply tapped")
 
     if message_text:
-        send_message(sender_id, message_text + " This is your {} message! Welcome".format(session['count']))
+        send_message(sender_id, message_text)
     elif message_attachments:
         page.send(sender_id, "Message with attachment received")
 
