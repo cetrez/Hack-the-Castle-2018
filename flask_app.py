@@ -23,7 +23,7 @@ os.sys.path.insert(0, parentdir)
 @app.route('/index')
 @app.route('/')
 def index():
-    if 'count' in session:
+    if session is not None:
         session['count'] += 1
     else:
         session['count'] = 0
@@ -48,6 +48,7 @@ def participant():
     participants.append({'name': 'Tulga Ariuntuya', 'id': 2, 'fb_id': 982936161761293})
     participants.append({'name': 'Gunnar Stenlund', 'id': 3, 'fb_id': 1386169068167016})
     participants.append({'name': 'Mohamed Hassainia', 'id': 4, 'fb_id': 100013370437252})
+
     return render_template('participant.html', participants=participants)
 # --------- end Participant -------
 

@@ -8,7 +8,7 @@ import json
 from config import CONFIG
 from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
-from flask import session
+from flask import g
 import models
 from models.all_models import *
 
@@ -89,7 +89,6 @@ def received_message(event):
         USER_SEQ[seq_id] = seq
 
     bot_receive(event, keyword, confidence)
-
 
 @page.handle_delivery
 def received_delivery_confirmation(event):

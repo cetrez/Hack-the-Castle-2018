@@ -9,6 +9,7 @@ class Questionnaire(db.Entity):
     event = Required(str)
     title = Required(str)
     questions = Set('Question')
+    bot_state = Optional('State')
 
     @staticmethod
     @db_session

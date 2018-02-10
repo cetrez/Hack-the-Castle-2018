@@ -20,8 +20,10 @@ class Info(db.Entity):
 
     @staticmethod
     @db_session
-    def select_info(tag):
-        return select(i for i in Info if tag in i.tag)[:]
+    def get_info(keyword):
+        et = EntityTags.get(tag_value=keyword)
+        i = Info.get(tag=et)
+        return i
 
     @staticmethod
     @db_session
