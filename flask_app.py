@@ -23,7 +23,7 @@ os.sys.path.insert(0, parentdir)
 @app.route('/index')
 @app.route('/')
 def index():
-    if session is not None:
+    if 'count' in session:
         session['count'] += 1
     else:
         session['count'] = 0
