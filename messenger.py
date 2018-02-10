@@ -79,7 +79,12 @@ def received_message(event):
             confidence = items[ent_id][0]['confidence']
             
     print("Keyword = " + keyword + ", Confidence = " + str(confidence))
+    
+    #TODO Dummy
+    keyword = "fika"
+    confidence = 1
 
+    '''
     #TODO Not sure if we should or need this code
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
@@ -87,6 +92,7 @@ def received_message(event):
         return None
     else:
         USER_SEQ[seq_id] = seq
+    '''
 
     bot_receive(event, keyword, confidence)
 
@@ -313,9 +319,13 @@ def initiate_feedback():
                                  QuickReply(title="I'm busy", payload="PICK_NO")],
                   metadata="DEVELOPER_DEFINED_METADATA")
                   
-def bot_receive(Event, keyword, confidence):
+def bot_receive(event, keyword, confidence):
     #Info state - messenger replies user with info from database
     if(confidence >= CONFIDENCE_THRESHOLD):
-        info = Info.select_info(keyword)
+        #TODO remove dummy
+        info = "Some info" #info = Info.get_info(keyword)
         page.send(event.sender_id, info, callback=send_text_callback, notification_type=NotificationType.REGULAR)
         #send_message(event.sender_id, info)
+        
+    #Testing state functionality
+    current_state = State.get_state
