@@ -8,7 +8,7 @@ hed = {'Authorization': 'Bearer ' + auth_tok}
 
 
 def getData(value, expressions) :
-    return {"doc": value+"Doc", "lookups": ["trait"], "id": (value+"Id"), "values": [{"value": value, "expressions": expressions}]}
+    return {"doc": value+"Doc", "lookups": ["trait"], "id": (value), "values": [{"value": value, "expressions": expressions}]}
 
 
 def addEntity(value, epxresstions) :
