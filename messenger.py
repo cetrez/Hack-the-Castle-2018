@@ -10,9 +10,11 @@ from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
 from flask import session
 import models
+from models.all_models import *
 
 USER_SEQ = {}
 
+CONFIDENCE_THRESHOLD = 0.8
 
 @page.handle_optin
 def received_authentication(event):
@@ -64,20 +66,21 @@ def received_message(event):
     message_attachments = message.get("attachments")
     quick_reply = message.get("quick_reply")
 
-    # set counter
-    if 'count' in session:
-        session['count'] += 1
-    else:
-        session['count'] = 0
-
     # Retrieve labels
     nlp = message['nlp']
-    labels = []
+    keyword = "Null" #Temporary, TODO concider this
+    confidence = 0
     if nlp is not None:
-        for k, vs in nlp['entities'].items():
-            for v in vs:
-                labels.append([v['confidence'], v['value']])
+        items = nlp['entities'] #We're expecting only one item. Facebook dev settings, Built-In NLP
+                                #However, seems I cant access item0, need to iterate through instead
+        for ent_id in items:
+            #ent_id is a string containing the entity id
+            keyword = items[ent_id][0]['value']
+            confidence = items[ent_id][0]['confidence']
+            
+    print("Keyword = " + keyword + ", Confidence = " + str(confidence))
 
+    #TODO Not sure if we should or need this code
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
         print("Ignore duplicated request")
@@ -85,16 +88,7 @@ def received_message(event):
     else:
         USER_SEQ[seq_id] = seq
 
-    if quick_reply:
-        quick_reply_payload = quick_reply.get('payload')
-        print("quick reply for message %s with payload %s" % (message_id, quick_reply_payload))
-
-        page.send(sender_id, "Quick reply tapped")
-
-    if message_text:
-        send_message(sender_id, message_text + " This is your {} message! Welcome".format(session['count']))
-    elif message_attachments:
-        page.send(sender_id, "Message with attachment received")
+    bot_receive(event, keyword, confidence)
 
 
 @page.handle_delivery
@@ -319,3 +313,10 @@ def initiate_feedback():
                   quick_replies=[QuickReply(title="Okay", payload="PICK_OK"),
                                  QuickReply(title="I'm busy", payload="PICK_NO")],
                   metadata="DEVELOPER_DEFINED_METADATA")
+                  
+def bot_receive(Event, keyword, confidence):
+    #Info state - messenger replies user with info from database
+    if(confidence >= CONFIDENCE_THRESHOLD):
+        info = Info.select_info(keyword)
+        page.send(event.sender_id, info, callback=send_text_callback, notification_type=NotificationType.REGULAR)
+        #send_message(event.sender_id, info)
