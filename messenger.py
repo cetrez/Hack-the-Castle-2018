@@ -81,18 +81,16 @@ def received_message(event):
     print("Keyword = " + keyword + ", Confidence = " + str(confidence))
     
     #TODO Dummy
-    keyword = "fika"
+    keyword = "Coffee"
     confidence = 1
 
-    '''
-    #TODO Not sure if we should or need this code
+    #TODO Not sure about the details
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
         print("Ignore duplicated request")
         return None
     else:
         USER_SEQ[seq_id] = seq
-    '''
 
     bot_receive(event, keyword, confidence)
 
@@ -320,12 +318,38 @@ def initiate_feedback():
                   metadata="DEVELOPER_DEFINED_METADATA")
                   
 def bot_receive(event, keyword, confidence):
+    #Put new participants in DB
+    bot_log_participant(event.sender_id)
+    
     #Info state - messenger replies user with info from database
     if(confidence >= CONFIDENCE_THRESHOLD):
-        #TODO remove dummy
-        info = "Some info" #info = Info.get_info(keyword)
-        page.send(event.sender_id, info, callback=send_text_callback, notification_type=NotificationType.REGULAR)
-        #send_message(event.sender_id, info)
+        info = Info.get_info(keyword)
+        page.send(event.sender_id, info.info_text)
         
     #Testing state functionality
-    current_state = State.get_state
+    current_state = State.get_state(event.sender_id)
+    if(current_state is None):
+        current_state = State.create_state(event.sender_id, 1)
+        print("State created")
+        questions = Questionnaire.select_all_questions(current_state.qstnnr.id) 
+        #send first question
+        page.send(event.sender_id, questions[0].question)
+    else:
+        #Put answer in DB
+        #Iterate state
+        State.inc_state(event.sender_id)
+        #Ask next question or thank user
+        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
+        questions = Questionnaire.select_all_questions(current_state.qstnnr.id).questions
+        if(State.q_numb >= len(questions)):
+            page.send(event.sender_id, "Thank you")
+            State.delete_state(event.sender_id)
+        else:
+            page.send(event.sender_id, questions[State.q_numb].question)
+        
+def bot_log_participant(fb_id) :
+    participant = Participant.get_participant(fb_id)
+    if participant is None:
+        profile = page.get_user_profile(fb_id)
+        name = "{} {}".format(profile['first_name'], profile['last_name'])
+        participant = Participant.create_participant(name, fb_id)
