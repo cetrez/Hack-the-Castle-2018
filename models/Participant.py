@@ -10,6 +10,7 @@ class Participant(db.Entity):
     fb_id = Required(str)
     group = Optional('Group')
     question = Optional(int)
+    feedback = Set('Feedback')
 
     # ---- Query
     @staticmethod

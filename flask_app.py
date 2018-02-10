@@ -26,14 +26,17 @@ def index():
     return render_template('index.html')
 
 
+# --------- Event -------
 # displays all events
 @app.route('/event')
 def event():
     events = list()
     events.append({'name': 'Hack the Castle', 'id': 1})
     return render_template('event.html', events=events)
+# --------- end Event -------
 
 
+# --------- Participant -------
 # displays all participants
 @app.route('/participant')
 def participant():
@@ -42,8 +45,10 @@ def participant():
     participants.append({'name': 'Gunnar Stenlund', 'id': 3, 'fb_id': 1386169068167016})
     participants.append({'name': 'Mohamed Hassainia', 'id': 4, 'fb_id': 100013370437252})
     return render_template('participant.html', participants=participants)
+# --------- end Participant -------
 
 
+# --------- Questions -------
 # displays all questions
 @app.route('/question')
 def question():
@@ -65,8 +70,10 @@ def add_question():
 
     # display add-question form
     return render_template('add-question.html', categories=questionnaire, form=form)
+# --------- end Questions ---------
 
 
+# --------- EntityTag ---------
 # display all entity-tags
 @app.route('/entity-tag')
 def entity_tag():
@@ -99,8 +106,10 @@ def add_entity_tag():
 
     # display add-question form
     return render_template('add-entity-tag.html', form=form)
+# --------- end EntityTag ---------
 
 
+# --------- Info ---------
 # display all info
 @app.route('/info')
 def info():
@@ -121,8 +130,10 @@ def add_info():
 
     # display add-info form
     return render_template('add-info.html', form=form, etgs=entity_tags)
+# --------- end Info ---------
 
 
+# --------- Questionnaire ---------
 # display all questionnaires
 @app.route('/questionnaire')
 def questionnaire():
@@ -130,7 +141,7 @@ def questionnaire():
     return render_template('questionnaire.html', qstnnrs=questionnaires)
 
 
-# add new info
+# add new questionnaire
 @app.route('/add-questionnaire', methods=['POST', 'GET'])
 def add_questionnaire():
     form = QuestionnaireForm()
@@ -144,11 +155,24 @@ def add_questionnaire():
     return render_template('add-questionnaire.html', form=form)
 
 
+# trigger sending questionnaire to all users of active event
+@app.route('/send-questionnaire/<int:qstnnr_id>', methods=['POST'])
+def send_questionnaire(qstnnr_id):
+    # selecting targeted questionnaire
+    qstnnr = Questionnaire.select_all_questions()
+
+    # all the questions are here: questions = qstnnr.questions
+    return redirect(url_for('questionnaire'))
+# --------- end Questionnaire ---------
+
+
+# --------- Feedback ---------
 # displaying all feedback
 @app.route('/feedback', methods=['GET'])
 def feedback():
     fbk = Feedback.select_all_feedback()
     return render_template('feedback.html', feedback=fbk)
+# --------- end Feedback ---------
 
 
 # set up webhooks
