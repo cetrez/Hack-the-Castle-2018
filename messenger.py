@@ -81,8 +81,8 @@ def received_message(event):
     print("Keyword = " + keyword + ", Confidence = " + str(confidence))
     
     #TODO Dummy
-    keyword = "Coffee"
-    confidence = 1
+    #keyword = "Coffee"
+    #confidence = 1
 
     #TODO Not sure about the details
     seq_id = sender_id + ':' + recipient_id
@@ -322,6 +322,7 @@ def bot_receive(event, keyword, confidence):
     bot_log_participant(event.sender_id)
     
     #Info state - messenger replies user with info from database
+    print(str(confidence) + " " + str(CONFIDENCE_THRESHOLD))
     if(confidence >= CONFIDENCE_THRESHOLD):
         info = Info.get_info(keyword)
         page.send(event.sender_id, info.info_text)
@@ -331,21 +332,31 @@ def bot_receive(event, keyword, confidence):
     if(current_state is None):
         current_state = State.create_state(event.sender_id, 1)
         print("State created")
-        questions = Questionnaire.select_all_questions(current_state.qstnnr.id) 
+        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
+        questions = Question.select_all_questions()
+        
         #send first question
+        #print(questions[0].question)
+        page.send(event.sender_id, str(current_state.q_numb))
         page.send(event.sender_id, questions[0].question)
+        page.send(event.sender_id, "state created")
     else:
         #Put answer in DB
         #Iterate state
-        State.inc_state(event.sender_id)
+        current_state = State.inc_state(event.sender_id)
+        page.send(event.sender_id, "state incremented {}".format(current_state.q_numb))
         #Ask next question or thank user
         #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
-        questions = Questionnaire.select_all_questions(current_state.qstnnr.id).questions
-        if(State.q_numb >= len(questions)):
+        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id).questions
+        questions = Question.select_all_questions()
+        print(questions)
+        if(current_state.q_numb >= len(questions)):
             page.send(event.sender_id, "Thank you")
+            page.send(event.sender_id, str(current_state.q_numb))
             State.delete_state(event.sender_id)
         else:
-            page.send(event.sender_id, questions[State.q_numb].question)
+            page.send(event.sender_id, str(current_state.q_numb))
+            page.send(event.sender_id, questions[current_state.q_numb].question)        
         
 def bot_log_participant(fb_id) :
     participant = Participant.get_participant(fb_id)
