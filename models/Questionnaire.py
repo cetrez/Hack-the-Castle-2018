@@ -1,7 +1,6 @@
 from pony.orm import *
 from models.DataBase import DataBase
 from models.EntityTags import EntityTags
-
 db = DataBase.get_database()
 
 
@@ -33,9 +32,9 @@ class Questionnaire(db.Entity):
     @staticmethod
     @db_session
     def select_all_questions(qstnnr_id):
-        q = Questionnaire[qstnnr_id]
-        q.questions.load()
-        return q
+        # an array of questions
+        questions = select((qst.questions.question) for qst in Questionnaire if qst.id == qstnnr_id)[:]
+        return questions
 
     @staticmethod
     @db_session
