@@ -61,7 +61,7 @@ def received_message(event):
     message_text = message.get("text")
     message_attachments = message.get("attachments")
     quick_reply = message.get("quick_reply")
-    
+
     # Should NOT take care of callbacks TODO this might be a dirty solution
     if quick_reply is not None:
         print("received message contains payload, returning")
@@ -83,7 +83,7 @@ def received_message(event):
             confidence = items[ent_id][0]['confidence']
 
     print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
-    
+
     # TODO Dummy - used for testing bot capability to handle keywords from nlp.
     # keyword = "Team"
     # confidence = 1
@@ -156,7 +156,9 @@ def bot_receive(event, keyword, confidence):
         else:
             #Info state
             info = Info.get_info(keyword)
-            bot_reply_info(event, info, keyword)
+            if info is not None:
+                bot_reply_info(event, info, keyword)
+            page.send(event.sender_id, "I'm sorry, but I have no information for you")
     else:
         # State is not None
         # Current msg from user concidered as questionnaire answer

@@ -15,9 +15,9 @@ class Questionnaire(db.Entity):
     @staticmethod
     @db_session
     def get_questionnaire(keyword):
-        et = EntityTags.get(tag_value=keyword)
-        q = Questionnaire.get(tag=et)
-        q.load()
+        q = select(q for q in Questionnaire if q.tag.tag_value == keyword)[:]
+        if len(q) == 0:
+            return None
         return q
 
     @staticmethod
