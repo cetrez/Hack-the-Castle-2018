@@ -1,8 +1,7 @@
 # coding: utf-8
 import os
 import time
-from config import CONFIG
-from fbmq import Attachment, Template, QuickReply, NotificationType
+from fbmq import QuickReply, NotificationType
 from fbpage import page
 import models
 from models.all_models import *
@@ -143,14 +142,15 @@ def bot_receive(event, keyword, confidence):
             # Questionnaire is found, set state and retrieve questions
             current_state = State.create_state(event.sender_id, questionnaire.id)
             print("State created, qnnr={}".format(current_state.q_numb))
-            questions = get_questions(current_state.qstnnr.id)
+            # questions = get_questions(current_state.qstnnr.id)
 
             # Get user confirmation that user is interested in questionnaire
             # Could be solved by using State 0 to trigger quick_reply and never increment
             #       from 0->1 unless callback is OK
             # First question in Questionnaire contains text question to ask for participation
 
-            bot_ask_participation(event.sender_id, questions[0].question)
+            question = "Is it ok if I ask you a few questions about {}".format(questionnaire.title)
+            bot_ask_participation(event.sender_id, question)
             # page.send(event.sender_id, questions[current_state.q_numb].question)
 
         else:
@@ -169,7 +169,8 @@ def bot_receive(event, keyword, confidence):
             return
 
         # retrieve relevant questions
-        questions = get_questions(current_state.qstnnr.id)
+        # questions = get_questions(current_state.qstnnr.id)
+        questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
 
         last_question_id = questions[current_state.q_numb].id
 
@@ -215,7 +216,7 @@ def bot_ask_participation(recipient, question):
 
 
 @page.callback(['PICK_OK'])
-def bot_callback_OK(payload, event):
+def bot_callback_ok(payload, event):
     # Participant have accepted answering questionnaire.
     # This is the only place where it is OK to proceed from state 0 to 1
     # Ask first question
@@ -230,26 +231,23 @@ def bot_callback_OK(payload, event):
         return
 
     # Get list of questions
-    questions = get_questions(current_state.qstnnr.id)
-    # questions = Question.select_all_questions()
-
-    # Iterate state
-    current_state = State.inc_state(event.sender_id)
+    # questions = get_questions(current_state.qstnnr.id)
+    questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
 
     page.send(event.sender_id, questions[current_state.q_numb].question)
 
 
 @page.callback(['PICK_NO'])
-def bot_callback_NO(payload, event):
-
+def bot_callback_no(payload, event):
     current_state = State.get_state(event.sender_id)
 
     # Should not happen - State SHOULD be created at this point
     if current_state is None or current_state.q_numb != 0:
         print("Unexpected state in bot_callback_NO")
         return
-
     State.delete_state(event.sender_id)
+    text = "Ok, maybe next time! Have a good day!"
+    page.send(event.sender_id, text)
 
 
 # Returns a list of questions filtered on qnnr_id
