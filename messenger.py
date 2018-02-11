@@ -99,7 +99,6 @@ def received_message(event):
     bot_receive(event, keyword, confidence)
 
 
-
 def send_message(recipient_id, text):
         page.send(recipient_id, text,
                   callback=send_text_callback,
