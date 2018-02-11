@@ -8,7 +8,7 @@ from forms.create_forms import InfoForm, QuestionForm, EntityTagForm, Questionna
 from models.all_models import *
 from EntityManager import addEntity
 from models.DataBase import DataBase
-
+from pprint import pprint
 
 DataBase.generate()
 app = Flask(__name__)
@@ -27,6 +27,22 @@ def index():
         session['count'] += 1
     else:
         session['count'] = 0
+
+    # Get qstnnr by keyword example. Make sure you have keyword and QN in DB
+    # keyword = 'coffee'
+    # q = Questionnaire.get_questionnaire(keyword)
+    # print(q.title)
+    # print(q.tag.tag_value)
+
+    # Example of saving feedback to DB.
+    # Participant.create_participant('Oleksii', '111')
+    # p = Participant.get_participant('111')
+    # Feedback.create_feedback(2, p.fb_id, 'Was awesome!')
+
+    # q = Questionnaire.select_all_questions(1)
+    # print(q.question[0].question)
+    # for value in q.questions:
+    #     print(value.question)
 
     return render_template('index.html', count=session['count'])
 
