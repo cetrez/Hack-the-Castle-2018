@@ -9,7 +9,7 @@ class Question(db.Entity):
     id = PrimaryKey(int, auto=True)
     qtnnr = Required('Questionnaire')
     question = Required(str)
-    feedback = Optional('Feedback')
+    feedback = Set('Feedback')
 
     @staticmethod
     @db_session
