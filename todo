@@ -22,11 +22,16 @@ All these need super user
 Save answers to DB                                                      #Gunnar
 helper function retrieve questions                                      #Gunnar
 replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar
-only trigger quest on keyword                                           #Gunnar
+only trigger questioneer on keyword (currently hardcoded)               #Gunnar
+Smoother replying (use ... when processing)                             #Gunnar
+Ask user before starting questioneer on organizer trigger               #Gunnar
+
 
 (message all user)                                                      #Gunnar, Alex
 trigger questioneer from gui (link send_questionnaire(qstnnr_id) in flask_app)  #Gunnar
 
 WIT                                                                     #Mohammed
+
+Test several concurrent users - has been taken into account but not tested enough
 
 Setting up server for presentation                                      #Alex

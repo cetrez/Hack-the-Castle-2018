@@ -68,8 +68,11 @@ def received_message(event):
 
     # Retrieve labels
     nlp = message['nlp']
-    keyword = "Null" #Temporary, TODO concider this
+    keyword = None
     confidence = 0
+
+    # Turned off as nlp is behaving badly TODO
+    '''
     if nlp is not None:
         items = nlp['entities'] #We're expecting only one item. Facebook dev settings, Built-In NLP
                                 #However, seems I cant access item0, need to iterate through instead
@@ -77,12 +80,12 @@ def received_message(event):
             #ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
             confidence = items[ent_id][0]['confidence']
-            
-    print("Keyword = " + keyword + ", Confidence = " + str(confidence))
+    '''        
+    print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
     
-    #TODO Dummy
-    #keyword = "Coffee"
-    #confidence = 1
+    #TODO Dummy - used for testing bot capability to handle keywords from nlp.
+    keyword = "Team"
+    confidence = 1
 
     #TODO Not sure about the details
     seq_id = sender_id + ':' + recipient_id
@@ -320,43 +323,73 @@ def initiate_feedback():
 def bot_receive(event, keyword, confidence):
     #Put new participants in DB
     bot_log_participant(event.sender_id)
-    
-    #Info state - messenger replies user with info from database
-    print(str(confidence) + " " + str(CONFIDENCE_THRESHOLD))
-    if(confidence >= CONFIDENCE_THRESHOLD):
-        info = Info.get_info(keyword)
-        page.send(event.sender_id, info.info_text)
         
-    #Testing state functionality
+    #Determine state
     current_state = State.get_state(event.sender_id)
     if(current_state is None):
-        current_state = State.create_state(event.sender_id, 1)
-        print("State created")
-        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
-        questions = Question.select_all_questions()
+        #Check if keyword is available and confidence is high enough
+        if(confidence < CONFIDENCE_THRESHOLD or keyword is None):
+            page.send(event.sender_id, "I'm sorry, but I have failed to interpret you")
+            return
         
-        #send first question
-        #print(questions[0].question)
-        page.send(event.sender_id, str(current_state.q_numb))
-        page.send(event.sender_id, questions[0].question)
-        page.send(event.sender_id, "state created")
+        #Check if keyword should trigger questionnaire
+        #TODO Not currently working
+        #questionnaire = Questionnaire.get_questionnaire(keyword)
+        #Ugly "workaround"
+        questionnaire = None
+        if keyword == "Team":
+            questionnaire = "Something"
+        
+        
+        if questionnaire is not None:
+            #Questionnaire is found, set state to retrieve answers
+            #TODO Questionnaire id currently hardcoded
+            current_state = State.create_state(event.sender_id, 1)
+            #TODO replace with filtering using helper function
+            questions = Question.select_all_questions()
+            
+            #Get user confirmation that user is interested in questionnaire
+            #Could be solved by using State 0 to trigger quick_reply and never increment from 0->1 unless callback is OK
+            #First question in Questionnaire contains text question to ask for participation
+            
+            bot_ask_participation(event.sender_id, questions[0].question)
+        else:
+            #Info state
+            info = Info.get_info(keyword)
+            bot_reply_info(event, info, keyword)
     else:
-        #Put answer in DB
+        #State is not None
+        #Current msg from user concidered as questionnaire answer
+        #State contains info on last q asked
+        
+        #If State q_numb == 0, it should be handled by callback function
+        if(current_state.q_numb == 0):
+            return
+        
+        #retrieve relevant questions
+        questions = Question.select_all_questions() #TODO filter on Questionnaire
+        
+        last_question_id = questions[current_state.q_numb].id
+        
+        #TODO Save answer to DB. Currently crashes DB
+        answer = event.message.get("text")
+        #Feedback.create_feedback(last_question_id, event.sender_id, answer)
+        
         #Iterate state
         current_state = State.inc_state(event.sender_id)
-        page.send(event.sender_id, "state incremented {}".format(current_state.q_numb))
+        page.send(event.sender_id, "state incremented {}".format(current_state.q_numb)) #Debug TODO remove
+        
         #Ask next question or thank user
-        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
-        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id).questions
-        questions = Question.select_all_questions()
-        print(questions)
+        
         if(current_state.q_numb >= len(questions)):
             page.send(event.sender_id, "Thank you")
             page.send(event.sender_id, str(current_state.q_numb))
             State.delete_state(event.sender_id)
         else:
             page.send(event.sender_id, str(current_state.q_numb))
-            page.send(event.sender_id, questions[current_state.q_numb].question)        
+            page.send(event.sender_id, questions[current_state.q_numb].question)
+        
+                
         
 def bot_log_participant(fb_id) :
     participant = Participant.get_participant(fb_id)
@@ -364,3 +397,51 @@ def bot_log_participant(fb_id) :
         profile = page.get_user_profile(fb_id)
         name = "{} {}".format(profile['first_name'], profile['last_name'])
         participant = Participant.create_participant(name, fb_id)
+
+#Retrieve info from DB and pass when calling this function        
+def bot_reply_info(event, info, keyword):
+    fail_reply = "Sorry, I have no information about {}".format(keyword)
+    if info is not None:
+        page.send(event.sender_id, info.info_text)
+    else:
+        page.send(event.sender_id, fail_reply)
+        
+def bot_ask_participation(recipient, question):
+    page.send(recipient, question,
+              quick_replies=[QuickReply(title="OK", payload="PICK_OK"),
+                             QuickReply(title="No thanks", payload="PICK_NO")],
+              metadata="DEVELOPER_DEFINED_METADATA") #TODO could be used to keep track of what questionnaire should be launched
+
+
+@page.callback(['PICK_OK'])
+def bot_callback_OK(payload, event):
+    #Participant have accepted answering questionnaire. This is the only place where it is OK to proceed from state 0 to 1
+    #Ask first question
+    
+    current_state = State.get_state(event.sender_id)
+    
+    #Should not happen - State SHOULD be created at this point
+    if current_state is None or current_state.q_numb != 0:
+        print("Unexpected state in bot_callback_OK")
+        return
+    
+    #TODO replace with filtering using helper function
+    questions = Question.select_all_questions()
+    
+    #Iterate state
+    current_state = State.inc_state(event.sender_id)
+    
+    page.send(event.sender_id, str(current_state.q_numb))
+    page.send(event.sender_id, questions[current_state.q_numb].question)
+    
+@page.callback(['PICK_NO'])
+def bot_callback_NO(payload, event):
+    
+    current_state = State.get_state(event.sender_id)
+    
+    #Should not happen - State SHOULD be created at this point
+    if current_state is None or current_state.q_numb != 0:
+        print("Unexpected state in bot_callback_NO")
+        return
+        
+    State.delete_state(event.sender_id)
