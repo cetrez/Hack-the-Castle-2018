@@ -8,7 +8,6 @@ from forms.create_forms import InfoForm, QuestionForm, EntityTagForm, Questionna
 from models.all_models import *
 from WitClient import WitClient
 from models.DataBase import DataBase
-from pprint import pprint
 
 DataBase.generate()
 app = Flask(__name__)
@@ -27,23 +26,6 @@ def index():
         session['count'] += 1
     else:
         session['count'] = 0
-
-    # Get qstnnr by keyword example. Make sure you have keyword and QN in DB
-    # keyword = 'coffee'
-    # q = Questionnaire.get_questionnaire(keyword)
-    # print(q.title)
-    # print(q.tag.tag_value)
-
-    # Example of saving feedback to DB.
-    # Participant.create_participant('Oleksii', '111')
-    # p = Participant.get_participant('111')
-    # Feedback.create_feedback(2, p.fb_id, 'Was awesome!')
-    entity_id = 'water'
-    exprs = ['I want to drink', 'water', 'a glass of water', 'where can i drink something']
-    client = WitClient(CONFIG['WIT_BASE_TOKEN'])
-    client.create_entity(entity_id)
-    client.create_sample('water', exprs)
-
     return render_template('index.html', count=session['count'])
 
 
@@ -116,15 +98,17 @@ def add_entity_tag():
             expressions = form.expressions.data.split(",")
             tag = form.tag_value.data
 
-            # adding entity to fb app
-            addEntity(tag, expressions)
-
+            # adding entity to wit.ai
+            client = WitClient(CONFIG['WIT_BASE_TOKEN'])
+            client.create_entity(tag)
+            st_code = client.create_sample(tag, expressions)
+            if(st_code == 200):
+                EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
+            else:
+                form._errors['Server error'] = 'Failed to push sample to wit.ai'
+                return render_template('add-entitytag.html', form=form)
             # add question to db and display success page
-            EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
-
             return redirect(url_for('entity_tag'))
-
-        return render_template('add-entitytag.html', form=form)
 
     # display add-question form
     return render_template('add-entity-tag.html', form=form)
@@ -159,11 +143,6 @@ def add_info():
 # display all questionnaires
 @app.route('/questionnaire')
 def questionnaire():
-    # --- example of how to get questionnaire by keyword and get the n of questions ---
-    # qstnnr = Questionnaire.get_questionnaire('coffee')
-    # q = Questionnaire.select_all_questions(qstnnr.id)
-    # print(len(q.questions))
-
     return render_template('questionnaire.html',
                            qstnnrs=Questionnaire.select_all_questionnaires())
 
