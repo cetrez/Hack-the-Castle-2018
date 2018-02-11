@@ -333,20 +333,14 @@ def bot_receive(event, keyword, confidence):
             return
         
         #Check if keyword should trigger questionnaire
-        #TODO Not currently working
-        #questionnaire = Questionnaire.get_questionnaire(keyword)
-        #Ugly "workaround"
-        questionnaire = None
-        if keyword == "Team":
-            questionnaire = "Something"
-        
+        questionnaire = Questionnaire.get_questionnaire(keyword)        
         
         if questionnaire is not None:
-            #Questionnaire is found, set state to retrieve answers
-            #TODO Questionnaire id currently hardcoded
-            current_state = State.create_state(event.sender_id, 1)
-            #TODO replace with filtering using helper function
-            questions = Question.select_all_questions()
+            #Questionnaire is found, set state and retrieve questions
+            current_state = State.create_state(event.sender_id, questionnaire.id)
+            print("State created, qnnr={}".format(current_state.q_numb))
+            questions = get_questions(current_state.qstnnr.id)
+            #questions = Question.select_all_questions() THIS IS OLD
             
             #Get user confirmation that user is interested in questionnaire
             #Could be solved by using State 0 to trigger quick_reply and never increment from 0->1 unless callback is OK
@@ -365,14 +359,16 @@ def bot_receive(event, keyword, confidence):
         #If State q_numb == 0, it should be handled by callback function
         #Execution here could indicate a bug. Dont know if that even happens, but it might be worth looking into it
         if(current_state.q_numb == 0):
+            State.delete_state(event.sender_id)
             return
         
         #retrieve relevant questions
-        questions = Question.select_all_questions() #TODO filter on Questionnaire
+        questions = get_questions(current_state.qstnnr.id) #TODO
+        #questions = Question.select_all_questions() OLD
         
         last_question_id = questions[current_state.q_numb].id
         
-        #TODO Save answer to DB. Currently crashes DB
+        #Save answer to DB.
         answer = event.message.get("text")
         Feedback.create_feedback(last_question_id, event.sender_id, answer)
         
@@ -421,10 +417,12 @@ def bot_callback_OK(payload, event):
     #Should not happen - State SHOULD be created at this point
     if current_state is None or current_state.q_numb != 0:
         print("Unexpected state in bot_callback_OK")
+        print(str(current_state is None))
         return
     
-    #TODO replace with filtering using helper function
-    questions = Question.select_all_questions()
+    #Get list of questions
+    questions = get_questions(current_state.qstnnr.id)
+    #questions = Question.select_all_questions()
     
     #Iterate state
     current_state = State.inc_state(event.sender_id)
@@ -442,3 +440,12 @@ def bot_callback_NO(payload, event):
         return
         
     State.delete_state(event.sender_id)
+    
+#Returns a list of questions filtered on qnnr_id TODO consider placement of this function or implement DB get function
+def get_questions(questionnaire_id):
+    questions = Question.select_all_questions()
+    qs = []
+    for question in questions:
+        if question.qtnnr.id == questionnaire_id:
+            qs.append(question)
+    return qs
