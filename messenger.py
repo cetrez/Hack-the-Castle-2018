@@ -87,7 +87,7 @@ def received_message(event):
     keyword = "Team"
     confidence = 1
 
-    #TODO Not sure about the details
+    #TODO Not sure about the details. Avoids several handlings of the same event.
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
         print("Ignore duplicated request")
@@ -377,16 +377,13 @@ def bot_receive(event, keyword, confidence):
         
         #Iterate state
         current_state = State.inc_state(event.sender_id)
-        page.send(event.sender_id, "state incremented {}".format(current_state.q_numb)) #Debug TODO remove
         
         #Ask next question or thank user
         
         if(current_state.q_numb >= len(questions)):
             page.send(event.sender_id, "Thank you")
-            page.send(event.sender_id, str(current_state.q_numb))
             State.delete_state(event.sender_id)
         else:
-            page.send(event.sender_id, str(current_state.q_numb))
             page.send(event.sender_id, questions[current_state.q_numb].question)
         
                 
