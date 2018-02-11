@@ -37,9 +37,11 @@ WIT                                                                     #Mohamme
 Test several concurrent users - has been taken into account but not tested enough
 
 Setting up server for presentation                                      #Alex
+
 Very important!! With a working WIT, do this:
-    -Implement code that is currently outcommented (messenger.py:74 and onward)
-    -Remove hardcoded keyword and confidence (messenger.py:86 and onward)
+    -Implement code that is currently outcommented (messenger.py:79 and onward)
+    -Remove hardcoded keyword and confidence (messenger.py:91 and onward)
+    -(Test DB with more than one Questionnaire and that both can be triggered)
 
 #TODO LATER
 Button for clearing bot state (dev purpose)

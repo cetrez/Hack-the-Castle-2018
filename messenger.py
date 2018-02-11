@@ -65,6 +65,11 @@ def received_message(event):
     message_text = message.get("text")
     message_attachments = message.get("attachments")
     quick_reply = message.get("quick_reply")
+    
+    #Should NOT take care of callbacks TODO this might be a dirty solution
+    if(quick_reply is not None):
+        print("recieved message contains payload, returning")
+        return
 
     # Retrieve labels
     nlp = message['nlp']
@@ -326,6 +331,7 @@ def bot_receive(event, keyword, confidence):
         
     #Determine state
     current_state = State.get_state(event.sender_id)
+    print("current_state == None {}".format(current_state is None))
     if(current_state is None):
         #Check if keyword is available and confidence is high enough
         if(confidence < CONFIDENCE_THRESHOLD or keyword is None):
@@ -340,13 +346,14 @@ def bot_receive(event, keyword, confidence):
             current_state = State.create_state(event.sender_id, questionnaire.id)
             print("State created, qnnr={}".format(current_state.q_numb))
             questions = get_questions(current_state.qstnnr.id)
-            #questions = Question.select_all_questions() THIS IS OLD
             
             #Get user confirmation that user is interested in questionnaire
             #Could be solved by using State 0 to trigger quick_reply and never increment from 0->1 unless callback is OK
             #First question in Questionnaire contains text question to ask for participation
             
             bot_ask_participation(event.sender_id, questions[0].question)
+            #page.send(event.sender_id, questions[current_state.q_numb].question)
+            
         else:
             #Info state
             info = Info.get_info(keyword)
@@ -357,14 +364,13 @@ def bot_receive(event, keyword, confidence):
         #State contains info on last q asked
         
         #If State q_numb == 0, it should be handled by callback function
-        #Execution here could indicate a bug. Dont know if that even happens, but it might be worth looking into it
+        #Execution here could indicate a bug. Deleting state to avoid getting stuck
         if(current_state.q_numb == 0):
             State.delete_state(event.sender_id)
             return
         
         #retrieve relevant questions
-        questions = get_questions(current_state.qstnnr.id) #TODO
-        #questions = Question.select_all_questions() OLD
+        questions = get_questions(current_state.qstnnr.id)
         
         last_question_id = questions[current_state.q_numb].id
         
@@ -413,11 +419,12 @@ def bot_callback_OK(payload, event):
     #Ask first question
     
     current_state = State.get_state(event.sender_id)
+    print("current_state == None {}".format(current_state is None))
     
     #Should not happen - State SHOULD be created at this point
     if current_state is None or current_state.q_numb != 0:
         print("Unexpected state in bot_callback_OK")
-        print(str(current_state is None))
+        print(str(event.sender_id))
         return
     
     #Get list of questions
