@@ -166,9 +166,9 @@ def bot_receive(event, keyword, confidence):
 
         # If State q_numb == 0, it should be handled by callback function
         # Execution here could indicate a bug. Deleting state to avoid getting stuck
-        if current_state.q_numb == 0:
-            State.delete_state(event.sender_id)
-            return
+        # if current_state.q_numb == 0:
+        #     State.delete_state(event.sender_id)
+        #     return
 
         # retrieve relevant questions
         # questions = get_questions(current_state.qstnnr.id)
