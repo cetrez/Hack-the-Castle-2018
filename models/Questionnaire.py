@@ -18,7 +18,7 @@ class Questionnaire(db.Entity):
         q = select(q for q in Questionnaire if q.tag.tag_value == keyword)[:]
         if len(q) == 0:
             return None
-        return q
+        return q[0]
 
     @staticmethod
     @db_session
