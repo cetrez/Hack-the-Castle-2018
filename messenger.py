@@ -363,6 +363,7 @@ def bot_receive(event, keyword, confidence):
         #State contains info on last q asked
         
         #If State q_numb == 0, it should be handled by callback function
+        #Execution here could indicate a bug. Dont know if that even happens, but it might be worth looking into it
         if(current_state.q_numb == 0):
             return
         
@@ -373,7 +374,7 @@ def bot_receive(event, keyword, confidence):
         
         #TODO Save answer to DB. Currently crashes DB
         answer = event.message.get("text")
-        #Feedback.create_feedback(last_question_id, event.sender_id, answer)
+        Feedback.create_feedback(last_question_id, event.sender_id, answer)
         
         #Iterate state
         current_state = State.inc_state(event.sender_id)
@@ -428,7 +429,6 @@ def bot_callback_OK(payload, event):
     #Iterate state
     current_state = State.inc_state(event.sender_id)
     
-    page.send(event.sender_id, str(current_state.q_numb))
     page.send(event.sender_id, questions[current_state.q_numb].question)
     
 @page.callback(['PICK_NO'])

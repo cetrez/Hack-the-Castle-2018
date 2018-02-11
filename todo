@@ -23,7 +23,8 @@ Save answers to DB                                                      #Gunnar
 helper function retrieve questions                                      #Gunnar
 replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar
 only trigger questioneer on keyword (currently hardcoded)               #Gunnar
-Smoother replying (use ... when processing)                             #Gunnar
+Smoother replying (use ... when processing)                             #Gunnar (postphoned)
+    Should be implemented by wrapping bot reply function
 Ask user before starting questioneer on organizer trigger               #Gunnar (check)
 
 
