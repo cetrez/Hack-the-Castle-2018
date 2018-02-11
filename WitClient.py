@@ -47,7 +47,7 @@ class WitClient(HttpClient):
         return response.status_code
 
     def create_sample(self, entity_id, exprs):
-        value = entity_id + '_value'
+        value = entity_id
 
         data = []
         for text in exprs:
