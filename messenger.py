@@ -251,6 +251,7 @@ def bot_callback_NO(payload, event):
 
     State.delete_state(event.sender_id)
 
+
 # Returns a list of questions filtered on qnnr_id
 # TODO consider placement of this function or implement DB get function
 def get_questions(questionnaire_id):
@@ -260,3 +261,11 @@ def get_questions(questionnaire_id):
         if question.qtnnr.id == questionnaire_id:
             qs.append(question)
     return qs
+
+
+def send_typing_off(recipient):
+    page.typing_off(recipient)
+
+
+def send_typing_on(recipient):
+    page.typing_on(recipient)
