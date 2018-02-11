@@ -24,7 +24,7 @@ helper function retrieve questions                                      #Gunnar
 replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar
 only trigger questioneer on keyword (currently hardcoded)               #Gunnar
 Smoother replying (use ... when processing)                             #Gunnar
-Ask user before starting questioneer on organizer trigger               #Gunnar
+Ask user before starting questioneer on organizer trigger               #Gunnar (check)
 
 
 (message all user)                                                      #Gunnar, Alex
