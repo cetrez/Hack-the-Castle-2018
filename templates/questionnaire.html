@@ -30,6 +30,7 @@
                                 <th class="text-center">Event</th>
                                 <th class="text-center">Title</th>
                                 <th class="text-center">№ questions</th>
+                                <th class="text-center">Keyword</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -40,6 +41,7 @@
                                     <td class="text-center">{{q.event}}</td>
                                     <td class="text-center">{{ q.title }}</td>
                                     <td class="text-center">{{q.questions|length}}</td>
+                                    <td class="text-center">{{q.tag.tag_value}}</td>
                                     <td class="text-center">
                                         <a href="/send-questionnaire/{{q.id}}">
                                             <button class="btn btn-info">Send</button>

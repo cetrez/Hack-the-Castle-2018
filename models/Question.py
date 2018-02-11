@@ -22,3 +22,4 @@ class Question(db.Entity):
         qstnnr = Questionnaire[qstnnr_id]
         p = Question(question=q, qtnnr=qstnnr)
         return p
+

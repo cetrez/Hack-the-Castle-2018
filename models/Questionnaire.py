@@ -18,6 +18,7 @@ class Questionnaire(db.Entity):
     def get_questionnaire(keyword):
         et = EntityTags.get(tag_value=keyword)
         q = Questionnaire.get(tag=et)
+        q.load()
         return q
 
     @staticmethod
@@ -26,6 +27,7 @@ class Questionnaire(db.Entity):
         q = select(p for p in Questionnaire)[:]
         for x in range(0, len(q)):
             q[x].questions.load()
+            q[x].tag.load()
         return q
 
     @staticmethod
