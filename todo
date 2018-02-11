@@ -19,14 +19,29 @@ kill -9 [ps pid]
 All these need super user
 
 #TODO
-Save answers to DB                                                      #Gunnar
-helper function retrieve questions                                      #Gunnar
-replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar
-only trigger quest on keyword                                           #Gunnar
+Save answers to DB                                                      #Gunnar (check)
+helper function retrieve questions                                      #Gunnar (check)
+replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar (check)
+only trigger questioneer on keyword (currently hardcoded)               #Gunnar (check)
+    -This is fixed. However the keyword passed to the bot function is currently hardcoded
+Smoother replying (use ... when processing)                             #Gunnar (postphoned)
+    -Should be implemented by wrapping bot reply function
+Ask user before starting questioneer on organizer trigger               #Gunnar (check)
+
 
 (message all user)                                                      #Gunnar, Alex
 trigger questioneer from gui (link send_questionnaire(qstnnr_id) in flask_app)  #Gunnar
 
 WIT                                                                     #Mohammed
 
+Test several concurrent users - has been taken into account but not tested enough
+
 Setting up server for presentation                                      #Alex
+
+Very important!! With a working WIT, do this:
+    -Implement code that is currently outcommented (messenger.py:79 and onward)
+    -Remove hardcoded keyword and confidence (messenger.py:91 and onward)
+    -(Test DB with more than one Questionnaire and that both can be triggered)
+
+#TODO LATER
+Button for clearing bot state (dev purpose)

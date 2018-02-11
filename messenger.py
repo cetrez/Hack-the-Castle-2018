@@ -1,20 +1,17 @@
 # coding: utf-8
 import os
 import time
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.sys.path.insert(0,parentdir)
-
-import json
 from config import CONFIG
 from fbmq import Attachment, Template, QuickReply, NotificationType
 from fbpage import page
-from flask import g
 import models
 from models.all_models import *
 
 USER_SEQ = {}
-
 CONFIDENCE_THRESHOLD = 0.8
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.sys.path.insert(0, parentdir)
+
 
 @page.handle_optin
 def received_authentication(event):
@@ -65,11 +62,19 @@ def received_message(event):
     message_text = message.get("text")
     message_attachments = message.get("attachments")
     quick_reply = message.get("quick_reply")
+    
+    # Should NOT take care of callbacks TODO this might be a dirty solution
+    if quick_reply is not None:
+        print("received message contains payload, returning")
+        return
 
     # Retrieve labels
     nlp = message['nlp']
-    keyword = "Null" #Temporary, TODO concider this
+    keyword = None
     confidence = 0
+
+    # Turned off as nlp is behaving badly TODO
+    '''
     if nlp is not None:
         items = nlp['entities'] #We're expecting only one item. Facebook dev settings, Built-In NLP
                                 #However, seems I cant access item0, need to iterate through instead
@@ -77,14 +82,14 @@ def received_message(event):
             #ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
             confidence = items[ent_id][0]['confidence']
-            
-    print("Keyword = " + keyword + ", Confidence = " + str(confidence))
+    '''        
+    print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
     
-    #TODO Dummy
-    #keyword = "Coffee"
-    #confidence = 1
+    # TODO Dummy - used for testing bot capability to handle keywords from nlp.
+    keyword = "Team"
+    confidence = 1
 
-    #TODO Not sure about the details
+    # TODO Not sure about the details. Avoids several handlings of the same event.
     seq_id = sender_id + ':' + recipient_id
     if USER_SEQ.get(seq_id, -1) >= seq:
         print("Ignore duplicated request")
@@ -93,6 +98,7 @@ def received_message(event):
         USER_SEQ[seq_id] = seq
 
     bot_receive(event, keyword, confidence)
+
 
 @page.handle_delivery
 def received_delivery_confirmation(event):
@@ -310,57 +316,149 @@ def send_account_linking(recipient):
 def send_text_message(recipient, text):
     page.send(recipient, text, metadata="DEVELOPER_DEFINED_METADATA")
 
+
 def initiate_feedback():
     for p in models.select_participants():
         page.send(p.fb_id, "We would appreciate your feedback!",
                   quick_replies=[QuickReply(title="Okay", payload="PICK_OK"),
                                  QuickReply(title="I'm busy", payload="PICK_NO")],
                   metadata="DEVELOPER_DEFINED_METADATA")
-                  
+
+
 def bot_receive(event, keyword, confidence):
-    #Put new participants in DB
+    # Put new participants in DB
     bot_log_participant(event.sender_id)
-    
-    #Info state - messenger replies user with info from database
-    print(str(confidence) + " " + str(CONFIDENCE_THRESHOLD))
-    if(confidence >= CONFIDENCE_THRESHOLD):
-        info = Info.get_info(keyword)
-        page.send(event.sender_id, info.info_text)
         
-    #Testing state functionality
+    # Determine state
     current_state = State.get_state(event.sender_id)
-    if(current_state is None):
-        current_state = State.create_state(event.sender_id, 1)
-        print("State created")
-        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
-        questions = Question.select_all_questions()
+    print("current_state == None {}".format(current_state is None))
+    if current_state is None:
+        # Check if keyword is available and confidence is high enough
+        if confidence < CONFIDENCE_THRESHOLD or keyword is None:
+            page.send(event.sender_id, "I'm sorry, but I have failed to interpret you")
+            return
         
-        #send first question
-        #print(questions[0].question)
-        page.send(event.sender_id, str(current_state.q_numb))
-        page.send(event.sender_id, questions[0].question)
-        page.send(event.sender_id, "state created")
+        # Check if keyword should trigger questionnaire
+        questionnaire = Questionnaire.get_questionnaire(keyword)        
+        
+        if questionnaire is not None:
+            # Questionnaire is found, set state and retrieve questions
+            current_state = State.create_state(event.sender_id, questionnaire.id)
+            print("State created, qnnr={}".format(current_state.q_numb))
+            questions = get_questions(current_state.qstnnr.id)
+            
+            # Get user confirmation that user is interested in questionnaire
+            # Could be solved by using State 0 to trigger quick_reply and never increment
+            #       from 0->1 unless callback is OK
+            # First question in Questionnaire contains text question to ask for participation
+            
+            bot_ask_participation(event.sender_id, questions[0].question)
+            # page.send(event.sender_id, questions[current_state.q_numb].question)
+            
+        else:
+            #Info state
+            info = Info.get_info(keyword)
+            bot_reply_info(event, info, keyword)
     else:
-        #Put answer in DB
-        #Iterate state
+        # State is not None
+        # Current msg from user concidered as questionnaire answer
+        # State contains info on last q asked
+        
+        # If State q_numb == 0, it should be handled by callback function
+        # Execution here could indicate a bug. Deleting state to avoid getting stuck
+        if current_state.q_numb == 0:
+            State.delete_state(event.sender_id)
+            return
+        
+        # retrieve relevant questions
+        questions = get_questions(current_state.qstnnr.id)
+        
+        last_question_id = questions[current_state.q_numb].id
+        
+        # Save answer to DB.
+        answer = event.message.get("text")
+        Feedback.create_feedback(last_question_id, event.sender_id, answer)
+        
+        # Iterate state
         current_state = State.inc_state(event.sender_id)
-        page.send(event.sender_id, "state incremented {}".format(current_state.q_numb))
-        #Ask next question or thank user
-        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id)
-        #questions = Questionnaire.select_all_questions(current_state.qstnnr.id).questions
-        questions = Question.select_all_questions()
-        print(questions)
-        if(current_state.q_numb >= len(questions)):
+        
+        # Ask next question or thank user
+        
+        if current_state.q_numb >= len(questions):
             page.send(event.sender_id, "Thank you")
-            page.send(event.sender_id, str(current_state.q_numb))
             State.delete_state(event.sender_id)
         else:
-            page.send(event.sender_id, str(current_state.q_numb))
-            page.send(event.sender_id, questions[current_state.q_numb].question)        
+            page.send(event.sender_id, questions[current_state.q_numb].question)
         
-def bot_log_participant(fb_id) :
+
+def bot_log_participant(fb_id):
     participant = Participant.get_participant(fb_id)
     if participant is None:
         profile = page.get_user_profile(fb_id)
         name = "{} {}".format(profile['first_name'], profile['last_name'])
         participant = Participant.create_participant(name, fb_id)
+    return participant
+
+
+# Retrieve info from DB and pass when calling this function
+def bot_reply_info(event, info, keyword):
+    reply = "Sorry, I have no information about '{}'".format(keyword)
+    if info is not None:
+        reply = info.info_text
+    page.send(event.sender_id, reply)
+
+
+# TODO could be used to keep track of what questionnaire should be launched
+def bot_ask_participation(recipient, question):
+    page.send(recipient, question,
+              quick_replies=[QuickReply(title="OK", payload="PICK_OK"),
+                             QuickReply(title="No thanks", payload="PICK_NO")],
+              metadata="DEVELOPER_DEFINED_METADATA")
+
+
+@page.callback(['PICK_OK'])
+def bot_callback_OK(payload, event):
+    # Participant have accepted answering questionnaire.
+    # This is the only place where it is OK to proceed from state 0 to 1
+    # Ask first question
+    
+    current_state = State.get_state(event.sender_id)
+    print("current_state == None {}".format(current_state is None))
+    
+    # Should not happen - State SHOULD be created at this point
+    if current_state is None or current_state.q_numb != 0:
+        print("Unexpected state in bot_callback_OK")
+        print(str(event.sender_id))
+        return
+    
+    # Get list of questions
+    questions = get_questions(current_state.qstnnr.id)
+    # questions = Question.select_all_questions()
+    
+    # Iterate state
+    current_state = State.inc_state(event.sender_id)
+    
+    page.send(event.sender_id, questions[current_state.q_numb].question)
+
+
+@page.callback(['PICK_NO'])
+def bot_callback_NO(payload, event):
+    
+    current_state = State.get_state(event.sender_id)
+    
+    # Should not happen - State SHOULD be created at this point
+    if current_state is None or current_state.q_numb != 0:
+        print("Unexpected state in bot_callback_NO")
+        return
+        
+    State.delete_state(event.sender_id)
+    
+# Returns a list of questions filtered on qnnr_id
+# TODO consider placement of this function or implement DB get function
+def get_questions(questionnaire_id):
+    questions = Question.select_all_questions()
+    qs = []
+    for question in questions:
+        if question.qtnnr.id == questionnaire_id:
+            qs.append(question)
+    return qs

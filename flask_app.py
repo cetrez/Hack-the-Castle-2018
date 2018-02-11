@@ -6,9 +6,8 @@ from config import CONFIG
 from fbpage import page
 from forms.create_forms import InfoForm, QuestionForm, EntityTagForm, QuestionnaireForm
 from models.all_models import *
-from EntityManager import addEntity
+from WitClient import WitClient
 from models.DataBase import DataBase
-
 
 DataBase.generate()
 app = Flask(__name__)
@@ -27,7 +26,6 @@ def index():
         session['count'] += 1
     else:
         session['count'] = 0
-
     return render_template('index.html', count=session['count'])
 
 
@@ -100,15 +98,17 @@ def add_entity_tag():
             expressions = form.expressions.data.split(",")
             tag = form.tag_value.data
 
-            # adding entity to fb app
-            addEntity(tag, expressions)
-
+            # adding entity to wit.ai
+            client = WitClient(CONFIG['WIT_BASE_TOKEN'])
+            client.create_entity(tag)
+            st_code = client.create_sample(tag, expressions)
+            if(st_code == 200):
+                EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
+            else:
+                form._errors['Server error'] = 'Failed to push sample to wit.ai'
+                return render_template('add-entitytag.html', form=form)
             # add question to db and display success page
-            EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
-
             return redirect(url_for('entity_tag'))
-
-        return render_template('add-entitytag.html', form=form)
 
     # display add-question form
     return render_template('add-entity-tag.html', form=form)
@@ -143,11 +143,6 @@ def add_info():
 # display all questionnaires
 @app.route('/questionnaire')
 def questionnaire():
-    # --- example of how to get questionnaire by keyword and get the n of questions ---
-    # qstnnr = Questionnaire.get_questionnaire('coffee')
-    # q = Questionnaire.select_all_questions(qstnnr.id)
-    # print(len(q.questions))
-
     return render_template('questionnaire.html',
                            qstnnrs=Questionnaire.select_all_questionnaires())
 
