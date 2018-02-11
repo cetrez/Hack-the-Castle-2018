@@ -158,7 +158,8 @@ def bot_receive(event, keyword, confidence):
             info = Info.get_info(keyword)
             if info is not None:
                 bot_reply_info(event, info, keyword)
-            page.send(event.sender_id, "I'm sorry, but I have no information for you")
+            else:
+                page.send(event.sender_id, "I'm sorry, but I have no information for you")
     else:
         # State is not None
         # Current msg from user concidered as questionnaire answer
