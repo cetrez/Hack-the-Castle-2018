@@ -6,7 +6,7 @@ from config import CONFIG
 from fbpage import page
 from forms.create_forms import InfoForm, QuestionForm, EntityTagForm, QuestionnaireForm
 from models.all_models import *
-from EntityManager import addEntity
+from WitClient import WitClient
 from models.DataBase import DataBase
 from pprint import pprint
 
@@ -38,11 +38,11 @@ def index():
     # Participant.create_participant('Oleksii', '111')
     # p = Participant.get_participant('111')
     # Feedback.create_feedback(2, p.fb_id, 'Was awesome!')
-
-    # q = Questionnaire.select_all_questions(1)
-    # print(q.question[0].question)
-    # for value in q.questions:
-    #     print(value.question)
+    entity_id = 'water'
+    exprs = ['I want to drink', 'water', 'a glass of water', 'where can i drink something']
+    client = WitClient(CONFIG['WIT_BASE_TOKEN'])
+    client.create_entity(entity_id)
+    client.create_sample('water', exprs)
 
     return render_template('index.html', count=session['count'])
 
