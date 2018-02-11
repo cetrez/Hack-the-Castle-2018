@@ -35,11 +35,7 @@
                             {% for i in info %}
                                 <tr>
                                     <td class="text-center">{{i.id}}</td>
-                                    <td class="text-center">
-                                        {% for tv in i.tag.tag_value %}
-                                            {{tv}}
-                                        {% endfor %}
-                                    </td>
+                                    <td class="text-center">{{i.tag.tag_value}}</td>
                                     <td class="text-center">{{ i.info_text }}</td>
                                 </tr>
                             {% endfor %}
