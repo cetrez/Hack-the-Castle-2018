@@ -24,9 +24,9 @@ class Questionnaire(db.Entity):
     @db_session
     def select_all_questionnaires():
         q = select(p for p in Questionnaire)[:]
-        for x in range(0, len(q)):
-            q[x].questions.load()
-            q[x].tag.load()
+        for x in q:
+            x.questions.load()
+            x.tag.load()
         return q
 
     @staticmethod
