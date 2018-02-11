@@ -2,7 +2,7 @@ import  requests
 
 url = 'https://api.wit.ai/entities?v=20160526'
 
-auth_tok = 'XEXPZR2CLQQIXLS7ZS4CMWUNZM7NIERE'
+auth_tok = 'KT4AR7CGRPLN47WP25YXMRJJ6IU6SNE2'
 
 hed = {'Authorization': 'Bearer ' + auth_tok}
 
