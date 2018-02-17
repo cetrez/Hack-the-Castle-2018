@@ -22,15 +22,21 @@ All these need super user
 Save answers to DB                                                      #Gunnar (check)
 helper function retrieve questions                                      #Gunnar (check)
 replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar (check)
-only trigger questioneer on keyword (currently hardcoded)               #Gunnar (check)
-    -This is fixed. However the keyword passed to the bot function is currently hardcoded
+only trigger questioneer on relevant keyword                            #Gunnar (check)
 Smoother replying (use ... when processing)                             #Gunnar (postphoned)
     -Should be implemented by wrapping bot reply function
 Ask user before starting questioneer on organizer trigger               #Gunnar (check)
 
 
-(message all user)                                                      #Gunnar, Alex
-trigger questioneer from gui (link send_questionnaire(qstnnr_id) in flask_app)  #Gunnar
+(message all user) Bot functionality                                    #Gunnar (check) (tested with only one participant)
+    - add to web interface and call bot_msg_all_participants(msg)       #Alex
+trigger questioneer from gui                                            
+    - Bot functionality                                                 #Gunnar (check) (tested with only one participant)
+    - Trigger from web interface                                        #Alex
+    
+    ( I added a call to bot function in flask_app.send_questionnaire(qstnnr_id).
+    However, I get "Method Not Allowed" from the web interface when using Action/Send.
+    Not sure what is up //Gunnar)
 
 WIT                                                                     #Mohammed
 
@@ -45,3 +51,5 @@ Very important!! With a working WIT, do this:
 
 #TODO LATER
 Button for clearing bot state (dev purpose)
+DB Interface - as it is now, bot code is dependent on DB structure.
+    Should instead depend on an interface, that handles DB queries.

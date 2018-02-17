@@ -72,7 +72,7 @@ def received_message(event):
     keyword = None
     confidence = 0
 
-    # TODO Turned off as nlp is behaving badly
+    # Get keywords from nlp
     if nlp is not None:
         # We're expecting only one item. Facebook dev settings, Built-In NLP
         # However, seems I cant access item0, need to iterate through instead
@@ -80,13 +80,9 @@ def received_message(event):
         for ent_id in items:
             # ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
-            confidence = items[ent_id][0]['confidence']
+            confidence = items[ent_id][0]['confidence']    
 
     print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
-
-    # TODO Dummy - used for testing bot capability to handle keywords from nlp.
-    # keyword = "Team"
-    # confidence = 1
 
     # TODO Not sure about the details. Avoids several handlings of the same event.
     seq_id = sender_id + ':' + recipient_id
@@ -269,3 +265,23 @@ def send_typing_off(recipient):
 
 def send_typing_on(recipient):
     page.typing_on(recipient)
+    
+# Launching questionnaire from web interface (organizer)
+# Wont launch for participants already in questionnaire - states are not advanced enough to handle this.
+def bot_launch_questionnaire_all_participants(questionnaire):
+    for participant in Participant.select_all_participants():
+        current_state = State.get_state(participant.fb_id)
+        if current_state is None:
+            #Launch questionnaire
+            #Set state
+            current_state = State.create_state(participant.fb_id, questionnaire.id)
+            print("State created, qnnr={}".format(current_state.q_numb))
+            #Ask participant
+            question = "We would like to have your opinion on {}. Is it ok if I ask you a few questions?".format(questionnaire.title)
+            bot_ask_participation(participant.fb_id, question)
+
+# Arg String msg is message to all registered participants            
+def bot_msg_all_participants(msg):
+    for participant in Participant.select_all_participants():
+        page.send(participant.fb_id, msg)
+        
