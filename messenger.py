@@ -81,6 +81,12 @@ def received_message(event):
             # ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
             confidence = items[ent_id][0]['confidence']
+            
+    # TODO Remove. Testing trigger all_participants bot_launch_questionnaire_all_participants
+    if keyword == "SECRET":
+        questionnaire = Questionnaire.get_questionnaire("Team")
+        bot_launch_questionnaire_all_participants(questionnaire)
+        return
 
     print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
 
@@ -269,15 +275,15 @@ def send_typing_on(recipient):
 # Launching questionnaire from web interface (organizer)
 # Wont launch for participants already in questionnaire - states are not advanced enough to handle this.
 def bot_launch_questionnaire_all_participants(questionnaire):
-    for participant in select_all_participants():
+    for participant in Participant.select_all_participants():
         current_state = State.get_state(participant.fb_id)
         if current_state is None:
             #Launch questionnaire
             #Set state
-            current_state = State.create_state(event.sender_id, questionnaire.id)
+            current_state = State.create_state(participant.fb_id, questionnaire.id)
             print("State created, qnnr={}".format(current_state.q_numb))
             #Ask participant
             question = "We would like to have your opinion on {}. Is it ok if I ask you a few questions?".format(questionnaire.title)
-            bot_ask_participation(event.sender_id, question)
+            bot_ask_participation(participant.fb_id, question)
             
     
