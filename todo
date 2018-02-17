@@ -28,8 +28,15 @@ Smoother replying (use ... when processing)                             #Gunnar 
 Ask user before starting questioneer on organizer trigger               #Gunnar (check)
 
 
-(message all user)                                                      #Gunnar, Alex
-trigger questioneer from gui (link send_questionnaire(qstnnr_id) in flask_app)  #Gunnar
+(message all user) Bot functionality                                    #Gunnar (check)
+    - add to web interface and call bot_msg_all_participants(msg)       #Alex
+trigger questioneer from gui                                            
+    - Bot functionality                                                 #Gunnar (check) (tested with only one participant)
+    - Trigger from web interface                                        #Alex
+    
+    ( I added a call to bot function in flask_app.send_questionnaire(qstnnr_id).
+    However, I get "Method Not Allowed" from the web interface when using Action/Send.
+    Not sure what is up //Gunnar)
 
 WIT                                                                     #Mohammed
 
