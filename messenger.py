@@ -248,40 +248,32 @@ def bot_callback_no(payload, event):
     page.send(event.sender_id, text)
 
 
-# Returns a list of questions filtered on qnnr_id
-# TODO consider placement of this function or implement DB get function
-def get_questions(questionnaire_id):
-    questions = Question.select_all_questions()
-    qs = []
-    for question in questions:
-        if question.qtnnr.id == questionnaire_id:
-            qs.append(question)
-    return qs
-
-
 def send_typing_off(recipient):
     page.typing_off(recipient)
 
 
 def send_typing_on(recipient):
     page.typing_on(recipient)
-    
+
+
 # Launching questionnaire from web interface (organizer)
 # Wont launch for participants already in questionnaire - states are not advanced enough to handle this.
 def bot_launch_questionnaire_all_participants(questionnaire):
     for participant in Participant.select_all_participants():
         current_state = State.get_state(participant.fb_id)
         if current_state is None:
-            #Launch questionnaire
-            #Set state
+            # Launch questionnaire
+            # Set state
             current_state = State.create_state(participant.fb_id, questionnaire.id)
             print("State created, qnnr={}".format(current_state.q_numb))
-            #Ask participant
+            # Ask participant
             question = "We would like to have your opinion on {}. Is it ok if I ask you a few questions?".format(questionnaire.title)
             bot_ask_participation(participant.fb_id, question)
+
 
 # Arg String msg is message to all registered participants            
 def bot_msg_all_participants(msg):
     for participant in Participant.select_all_participants():
         page.send(participant.fb_id, msg)
-        
+
+
