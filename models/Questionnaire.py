@@ -33,7 +33,7 @@ class Questionnaire(db.Entity):
     @db_session
     def select_all_questions(qstnnr_id):
         # an array of question obj
-        questions = select((qst.questions) for qst in Questionnaire if qst.id == qstnnr_id)[:]
+        questions = select(qst.questions for qst in Questionnaire if qst.id == qstnnr_id)[:]
         return questions
 
     @staticmethod
