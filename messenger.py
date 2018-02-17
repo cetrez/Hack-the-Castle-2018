@@ -81,12 +81,6 @@ def received_message(event):
             # ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
             confidence = items[ent_id][0]['confidence']
-            
-    # TODO Remove. Testing trigger all_participants bot_launch_questionnaire_all_participants
-    if keyword == "SECRET":
-        questionnaire = Questionnaire.get_questionnaire("Team")
-        bot_launch_questionnaire_all_participants(questionnaire)
-        return
 
     print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
 
