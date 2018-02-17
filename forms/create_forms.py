@@ -21,3 +21,7 @@ class QuestionForm(Form):
 class QuestionnaireForm(Form):
     title = StringField('Title', validators=[DataRequired()])
     tag_id = IntegerField('Entity Tag', validators=[DataRequired()])
+
+
+class MessageForm(Form):
+    message = StringField('Message', validators=[DataRequired()])

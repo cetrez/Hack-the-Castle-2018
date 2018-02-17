@@ -10,7 +10,7 @@ class Questionnaire(db.Entity):
     title = Required(str)
     tag = Optional('EntityTags')
     questions = Set('Question')
-    bot_state = Optional('State')
+    bot_state = Set('State')
 
     @staticmethod
     @db_session
@@ -19,6 +19,11 @@ class Questionnaire(db.Entity):
         if len(q) == 0:
             return None
         return q[0]
+
+    @staticmethod
+    @db_session
+    def get_questionnaire(q_id):
+        return Questionnaire[q_id]
 
     @staticmethod
     @db_session

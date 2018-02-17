@@ -1,10 +1,10 @@
 # coding: utf-8
 import os
 from flask import Flask, request, send_from_directory, render_template, redirect, url_for, session
-import messenger
+import messenger as pltfm
 from config import CONFIG
 from fbpage import page
-from forms.create_forms import InfoForm, QuestionForm, EntityTagForm, QuestionnaireForm
+from forms.create_forms import *
 from models.all_models import *
 from WitClient import WitClient
 from models.DataBase import DataBase
@@ -49,6 +49,18 @@ def participant():
     participants.append({'name': 'Mohamed Hassainia', 'id': 4, 'fb_id': 100013370437252})
 
     return render_template('participant.html', participants=participants)
+
+
+@app.route('/send-to-all-part', methods=['POST', 'GET'])
+def send_to_all_part():
+    form = MessageForm()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            message = form.message.data
+            pltfm.bot_msg_all_participants(message)
+            return redirect(url_for('participant'))
+    return render_template('send-to-all-part.html', form=form)
 # --------- end Participant -------
 
 
@@ -163,13 +175,13 @@ def add_questionnaire():
 
 
 # trigger sending questionnaire to all users of active event
-@app.route('/send-questionnaire/<int:qstnnr_id>', methods=['POST'])
+@app.route('/send-questionnaire/<int:qstnnr_id>', methods=['GET'])
 def send_questionnaire(qstnnr_id):
     # selecting targeted questionnaire
-    qstnnr = Questionnaire.select_all_questions()
-    
+    qstnnr = Questionnaire.get_questionnaire(q_id=qstnnr_id)
+    print(qstnnr.id)
     # Trigger bot
-    messenger.bot_launch_questionnaire_all_participants(qstnnr)
+    pltfm.bot_launch_questionnaire_all_participants(qstnnr)
 
     # all the questions are here: questions = qstnnr.questions
     return redirect(url_for('questionnaire'))

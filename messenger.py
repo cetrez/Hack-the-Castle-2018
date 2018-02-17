@@ -248,6 +248,7 @@ def bot_callback_no(payload, event):
     page.send(event.sender_id, text)
 
 
+
 def send_typing_off(recipient):
     page.typing_off(recipient)
 

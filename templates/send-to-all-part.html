@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/participant">Participant</a></li>
+    <li><a href="/send-to-all-part">Send message</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{form.message.label}}</h3>
+            </div>
+
+            <!--No Label Form-->
+            <!--===================================================-->
+            <form class="form-horizontal" action="/send-to-all-part" method="post">
+                <div class="panel-body">
+                    <textarea name="message"
+                              placeholder="Enter message here"
+                              rows="13"
+                              class="form-control"></textarea>
+                </div>
+                <div class="panel-footer text-right">
+                    <button class="btn btn-primary">Send</button>
+                </div>
+                {{ form.csrf_token }}
+            </form>
+            <!--===================================================-->
+            <!--End No Label Form-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}
