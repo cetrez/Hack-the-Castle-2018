@@ -167,6 +167,9 @@ def add_questionnaire():
 def send_questionnaire(qstnnr_id):
     # selecting targeted questionnaire
     qstnnr = Questionnaire.select_all_questions()
+    
+    # Trigger bot
+    bot_launch_questionnaire_all_participants(qstnnr)
 
     # all the questions are here: questions = qstnnr.questions
     return redirect(url_for('questionnaire'))
