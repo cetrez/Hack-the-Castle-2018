@@ -80,13 +80,7 @@ def received_message(event):
         for ent_id in items:
             # ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
-            confidence = items[ent_id][0]['confidence']
-            
-    #TODO Remove. Testing msg all participants
-    if keyword == "SECRET_WORD":
-        bot_msg_all_participants("Hello dear participant!")
-        return
-        
+            confidence = items[ent_id][0]['confidence']    
 
     print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
 
