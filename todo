@@ -45,3 +45,5 @@ Very important!! With a working WIT, do this:
 
 #TODO LATER
 Button for clearing bot state (dev purpose)
+DB Interface - as it is now, bot code is dependent on DB structure.
+    Should instead depend on an interface, that handles DB queries.
