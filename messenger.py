@@ -215,6 +215,9 @@ def bot_ask_participation(recipient, question):
 
 @page.callback(['PICK_OK'])
 def bot_callback_ok(payload, event):
+    # log participant
+    bot_log_participant(event.sender_id)
+
     # Participant have accepted answering questionnaire.
     # This is the only place where it is OK to proceed from state 0 to 1
     # Ask first question
@@ -237,6 +240,9 @@ def bot_callback_ok(payload, event):
 
 @page.callback(['PICK_NO'])
 def bot_callback_no(payload, event):
+    # log participant
+    bot_log_participant(event.sender_id)
+
     current_state = State.get_state(event.sender_id)
 
     # Should not happen - State SHOULD be created at this point
