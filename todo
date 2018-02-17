@@ -28,7 +28,7 @@ Smoother replying (use ... when processing)                             #Gunnar 
 Ask user before starting questioneer on organizer trigger               #Gunnar (check)
 
 
-(message all user) Bot functionality                                    #Gunnar (check)
+(message all user) Bot functionality                                    #Gunnar (check) (tested with only one participant)
     - add to web interface and call bot_msg_all_participants(msg)       #Alex
 trigger questioneer from gui                                            
     - Bot functionality                                                 #Gunnar (check) (tested with only one participant)
