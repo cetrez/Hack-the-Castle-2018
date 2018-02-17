@@ -22,7 +22,7 @@ class Questionnaire(db.Entity):
 
     @staticmethod
     @db_session
-    def get_questionnaire(q_id):
+    def get_questionnaire_by_id(q_id):
         return Questionnaire[q_id]
 
     @staticmethod
