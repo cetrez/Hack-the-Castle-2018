@@ -81,6 +81,12 @@ def received_message(event):
             # ent_id is a string containing the entity id
             keyword = items[ent_id][0]['value']
             confidence = items[ent_id][0]['confidence']
+            
+    #TODO Remove. Testing msg all participants
+    if keyword == "SECRET_WORD":
+        bot_msg_all_participants("Hello dear participant!")
+        return
+        
 
     print("Keyword = " + str(keyword) + ", Confidence = " + str(confidence))
 
@@ -279,5 +285,9 @@ def bot_launch_questionnaire_all_participants(questionnaire):
             #Ask participant
             question = "We would like to have your opinion on {}. Is it ok if I ask you a few questions?".format(questionnaire.title)
             bot_ask_participation(participant.fb_id, question)
-            
-    
+
+# Arg String msg is message to all registered participants            
+def bot_msg_all_participants(msg):
+    for participant in Participant.select_all_participants():
+        page.send(participant.fb_id, msg)
+        
