@@ -178,7 +178,7 @@ def add_questionnaire():
 @app.route('/send-questionnaire/<int:qstnnr_id>', methods=['GET'])
 def send_questionnaire(qstnnr_id):
     # selecting targeted questionnaire
-    qstnnr = Questionnaire.get_questionnaire(q_id=qstnnr_id)
+    qstnnr = Questionnaire.get_questionnaire_by_id(q_id=qstnnr_id)
     print(qstnnr.id)
     # Trigger bot
     pltfm.bot_launch_questionnaire_all_participants(qstnnr)
