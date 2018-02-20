@@ -116,6 +116,11 @@ def add_entity_tag():
 
             # adding entity to wit.ai
             client = WitClient(CONFIG['WIT_BASE_TOKEN'])
+
+            # TODO: This part should impl a transaction mechanism.
+            # 1. create entity.
+            # 2. push samples to entity
+            # 3. IF both success -> success, otherwise -> rollback
             client.create_entity(tag)
             resp_code = client.create_entity(tag, expressions)
             if resp_code == 200:
@@ -123,6 +128,7 @@ def add_entity_tag():
             else:
                 form._errors['Server error'] = 'Failed to push sample to wit.ai'
                 return render_template('add-entitytag.html', form=form)
+
             # add question to db and display success page
             return redirect(url_for('entity_tag'))
 
@@ -183,7 +189,6 @@ def add_questionnaire():
 def send_questionnaire(qstnnr_id):
     # selecting targeted questionnaire
     qstnnr = Questionnaire.get_questionnaire_by_id(q_id=qstnnr_id)
-    print(qstnnr.id)
     # Trigger bot
     pltfm.bot_launch_questionnaire_all_participants(qstnnr)
 
@@ -228,7 +233,7 @@ def authorize():
     account_linking_token = request.args.get('account_linking_token', '')
     redirect_uri = request.args.get('redirect_uri', '')
 
-    auth_code = '1234567890'
+    auth_code = CONFIG['AUTH_CODE']
 
     redirect_uri_success = redirect_uri + "&authorization_code=" + auth_code
 
@@ -245,4 +250,4 @@ def assets(path):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5001, debug=True, threaded=True)
+    app.run(host='127.0.0.1', port=5000, debug=True, threaded=True)
