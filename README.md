@@ -20,6 +20,19 @@ git clone https://github.com/Dierme/Hack-the-Castle-2018 .
 pip install -r requirments.txt
 python flask_app.py
 ```
+Then add a config.py to root of following structure
+```code
+CONFIG = {
+    'FACEBOOK_TOKEN': '$token',
+    'VERIFY_TOKEN': '$token',       #can be anything
+    'SERVER_URL': '$Your server Url of the project',
+    'SECRET_KEY': "$key",           #can be anything
+    'WTF_CSRF_SECRET_KEY': "$key",  #can be anything
+    'WIT_BASE_TOKEN': '$Wit base token',
+    'AUTH_CODE': '$code'             #can be anything
+}
+```
+
 Then visit [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 
