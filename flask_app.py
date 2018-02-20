@@ -110,7 +110,7 @@ def add_entity_tag():
             expressions = form.expressions.data.split(",")
 
             # trimming expressions of whitespaces
-            expressions = map(lambda x: x.strip(), len(expressions))
+            expressions = map(lambda x: x.strip(), expressions)
 
             tag = form.tag_value.data
 
@@ -121,13 +121,13 @@ def add_entity_tag():
             # 1. create entity.
             # 2. push samples to entity
             # 3. IF both success -> success, otherwise -> rollback
-            client.create_entity(tag)
-            resp_code = client.create_entity(tag, expressions)
+            resp_code = client.create_entity(tag)
             if resp_code == 200:
-                client.create_sample(form.tag_value.data, form.expressions.data)
+                client.create_sample(tag, expressions)
             else:
+                form._errors = {}
                 form._errors['Server error'] = 'Failed to push sample to wit.ai'
-                return render_template('add-entitytag.html', form=form)
+                return render_template('add-entity-tag.html', form=form)
 
             # add question to db and display success page
             return redirect(url_for('entity_tag'))
