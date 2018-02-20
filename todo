@@ -10,16 +10,11 @@
 8. Bot DB                                           #Tolga
 
 
-useful script
-lsof -I #used to list info on port listen and all that crap
-lsof -i | grep [port]
-ps -A | grep [the app that is listening to the port of interest]
-kill -9 [ps pid]
+
 
 All these need super user
 
 #TODO
-Save answers to DB                                                      #Gunnar (check)
 helper function retrieve questions                                      #Gunnar (check)
 replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar (check)
 only trigger questioneer on relevant keyword                            #Gunnar (check)
@@ -49,7 +44,6 @@ Very important!! With a working WIT, do this:
     -Remove hardcoded keyword and confidence (messenger.py:91 and onward)
     -(Test DB with more than one Questionnaire and that both can be triggered)
 
-#TODO LATER
-Button for clearing bot state (dev purpose)
-DB Interface - as it is now, bot code is dependent on DB structure.
-    Should instead depend on an interface, that handles DB queries.
+#TODO 20.2.18
+1. Button for clearing bot state (dev purpose)
+2. Transaction for wit. flask_app:120
