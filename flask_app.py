@@ -44,10 +44,6 @@ def event():
 @app.route('/participant')
 def participant():
     participants = Participant.select_all_participants()
-    participants.append({'name': 'Tulga Ariuntuya', 'id': 2, 'fb_id': 982936161761293})
-    participants.append({'name': 'Gunnar Stenlund', 'id': 3, 'fb_id': 1386169068167016})
-    participants.append({'name': 'Mohamed Hassainia', 'id': 4, 'fb_id': 100013370437252})
-
     return render_template('participant.html', participants=participants)
 
 
