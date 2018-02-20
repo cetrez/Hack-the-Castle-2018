@@ -53,8 +53,11 @@ def send_to_all_part():
 
     if request.method == 'POST':
         if form.validate_on_submit():
+            # get message from the form and send to all participants
             message = form.message.data
             pltfm.bot_msg_all_participants(message)
+
+            # go back to participants page
             return redirect(url_for('participant'))
     return render_template('send-to-all-part.html', form=form)
 # --------- end Participant -------
@@ -102,16 +105,21 @@ def add_entity_tag():
         if form.validate_on_submit():
 
             # preprocessing data
-            # not best, but works for now xD
+
+            # getting array of expressions
             expressions = form.expressions.data.split(",")
+
+            # trimming expressions of whitespaces
+            expressions = map(lambda x: x.strip(), len(expressions))
+
             tag = form.tag_value.data
 
             # adding entity to wit.ai
             client = WitClient(CONFIG['WIT_BASE_TOKEN'])
             client.create_entity(tag)
-            st_code = client.create_sample(tag, expressions)
-            if(st_code == 200):
-                EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
+            resp_code = client.create_entity(tag, expressions)
+            if resp_code == 200:
+                client.create_sample(form.tag_value.data, form.expressions.data)
             else:
                 form._errors['Server error'] = 'Failed to push sample to wit.ai'
                 return render_template('add-entitytag.html', form=form)
