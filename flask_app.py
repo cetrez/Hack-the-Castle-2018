@@ -124,6 +124,7 @@ def add_entity_tag():
             resp_code = client.create_entity(tag)
             if resp_code == 200:
                 client.create_sample(tag, expressions)
+                EntityTags.create_entitytag(form.tag_value.data, form.expressions.data)
             else:
                 form._errors = {}
                 form._errors['Server error'] = 'Failed to push sample to wit.ai'

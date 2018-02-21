@@ -27,8 +27,8 @@ $ curl -XPOST 'https://api.wit.ai/samples?v=20170307' \
         "text": "I want to fly to sfo",
         "entities": [
           {
-            "entity": "favorite_city",
-            "value": "London"
+            "entity": "boom",
+            "value": "boom"
           }
         ]
       }]'
