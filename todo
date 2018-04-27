@@ -1,0 +1,49 @@
+
+#Old TODO
+1. Polishing bot profile + welcoming message
+2. Bot provides general information about event
+3. Provide scheduled messages                       #Gunnar
+4. Bot organises a team                             #Gunnar
+5. Bot collects feedback                            #Gunnar
+6. NLP tasks                                        #Mohammad
+7. Backend for the bot                              #Alex
+8. Bot DB                                           #Tolga
+
+
+
+
+All these need super user
+
+#TODO
+helper function retrieve questions                                      #Gunnar (check)
+replace hardcoded questioneer-id with get-questioneer by keyword        #Gunnar (check)
+only trigger questioneer on relevant keyword                            #Gunnar (check)
+Smoother replying (use ... when processing)                             #Gunnar (postphoned)
+    -Should be implemented by wrapping bot reply function
+Ask user before starting questioneer on organizer trigger               #Gunnar (check)
+
+
+(message all user) Bot functionality                                    #Gunnar (check) (tested with only one participant)
+    - add to web interface and call bot_msg_all_participants(msg)       #Alex
+trigger questioneer from gui                                            
+    - Bot functionality                                                 #Gunnar (check) (tested with only one participant)
+    - Trigger from web interface                                        #Alex
+    
+    ( I added a call to bot function in flask_app.send_questionnaire(qstnnr_id).
+    However, I get "Method Not Allowed" from the web interface when using Action/Send.
+    Not sure what is up //Gunnar)
+
+WIT                                                                     #Mohammed
+
+Test several concurrent users - has been taken into account but not tested enough
+
+Setting up server for presentation                                      #Alex
+
+Very important!! With a working WIT, do this:
+    -Implement code that is currently outcommented (messenger.py:79 and onward)
+    -Remove hardcoded keyword and confidence (messenger.py:91 and onward)
+    -(Test DB with more than one Questionnaire and that both can be triggered)
+
+#TODO 20.2.18
+1. Button for clearing bot state (dev purpose)
+2. Transaction for wit. flask_app:120

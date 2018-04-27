@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/info">Info</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Information</h3>
+            </div>
+
+            <!--Bordered Table-->
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="row pad-btm">
+                    <a href="/add-info">
+                        <button class="btn btn-info">Add new Info</button>
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Entity Tag</th>
+                                <th class="text-center">Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in info %}
+                                <tr>
+                                    <td class="text-center">{{i.id}}</td>
+                                    <td class="text-center">{{i.tag.tag_value}}</td>
+                                    <td class="text-center">{{ i.info_text }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+            <!--End Bordered Table-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}

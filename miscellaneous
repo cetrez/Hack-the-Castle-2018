@@ -1,0 +1,48 @@
+# Usefull curl script for testing wit.api
+$ curl -XPOST 'https://api.wit.ai/samples?v=20170307' \
+  -H "Authorization: Bearer XEXPZR2CLQQIXLS7ZS4CMWUNZM7NIERE" \
+  -H "Content-Type: application/json" \
+  -d '[{
+        "text": "I want to fly to sfo",
+        "entities": [
+          {
+            "entity": "color",
+            "value": "color"
+          }
+        ]
+      }]'
+
+
+      curl -XPOST 'https://api.wit.ai/entities?v=20170307' \
+  -H "Authorization: Bearer XEXPZR2CLQQIXLS7ZS4CMWUNZM7NIERE" \
+  -H "Content-Type: application/json" \
+  -d '{"doc":"A city that I like",
+       "id":"favorite_city"}'
+
+
+       curl -XPOST 'https://api.wit.ai/samples?v=20170307' \
+  -H "Authorization: Bearer XEXPZR2CLQQIXLS7ZS4CMWUNZM7NIERE" \
+  -H "Content-Type: application/json" \
+  -d '[{
+        "text": "I want to fly to sfo",
+        "entities": [
+          {
+            "entity": "boom",
+            "value": "boom"
+          }
+        ]
+      }]'
+
+    curl -XPOST 'https://api.wit.ai/entities/favorite_city/values?v=20170307' \
+  -H 'Authorization: Bearer XEXPZR2CLQQIXLS7ZS4CMWUNZM7NIERE' \
+  -H 'Content-Type: application/json' \
+  -d '{"value":"London",
+       "expressions":["London"],
+       "metadata":"CITY_1234"}'
+
+
+# Finding and killing a process
+lsof -I #used to list info on port listen and all that crap
+lsof -i | grep [port]
+ps -A | grep [the app that is listening to the port of interest]
+kill -9 [ps pid]

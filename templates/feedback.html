@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/question">Questions</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bordered table</h3>
+            </div>
+
+            <!--Bordered Table-->
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Event</th>
+                                <th>User</th>
+                                <th>Question</th>
+                                <th>Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in feedback %}
+                                <tr>
+                                    <td class="text-center">
+                                        {{f.id}}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="label label-warning">Hack the Castle</span>
+                                    </td>
+                                    <td class="text-center">{{f.participant.name}}</td>
+                                    <td class="text-center">{{f.question.question}}</td>
+                                    <td class="text-center">{{ f.answer }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+            <!--End Bordered Table-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}

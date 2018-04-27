@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{%block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/info">Info</a></li>
+    <li><a href="/add-info">Add Info</a></li>
+</ol>
+{%endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add new Info</h3>
+            </div>
+
+            <!--No Label Form-->
+            <!--===================================================-->
+            <form class="form-horizontal" action="/add-info" method="post">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 mar-btm">
+                           <select name="tag_id">
+                               <option value="0">*select*</option>
+                            {% for et in etgs %}
+                               <option value="{{et.id}}">{{et.tag_value}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <textarea name="info_text"
+                              placeholder="info text"
+                              rows="13"
+                              class="form-control"></textarea>
+                    <div class="row">
+                        {% for field in form %}
+                            {{ field.errors|pprint }}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <button class="btn btn-primary">Add</button>
+                </div>
+                {{ form.csrf_token }}
+            </form>
+            <!--===================================================-->
+            <!--End No Label Form-->
+        </div>
+    </div>
+</div>
+
+{%endblock%}
